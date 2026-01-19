@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: OrderData - 1
   m_EditorClassIdentifier: 
   requiredRecipe: {fileID: 11400000, guid: de5ba99c8df722b439b7abead4dce920, type: 2}
-  wrapIcon: {fileID: 0}
-  accessoryIcon: {fileID: 0}
+  wrapIcon: {fileID: 2641698482785147981, guid: d21db972bedf6724ba085abed020cf37, type: 3}
+  accessoryIcon: {fileID: -556663896244417668, guid: 299ff6e5adf67714095f96a774c07632, type: 3}

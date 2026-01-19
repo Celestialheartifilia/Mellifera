@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: FlowerData - 1
   m_EditorClassIdentifier: 
   displayName: Flower 1
-  icon: {fileID: 0}
+  icon: {fileID: 538513131370383185, guid: 57c22f90f931a3b4a814b5c3896df1aa, type: 3}
   typeId: 1

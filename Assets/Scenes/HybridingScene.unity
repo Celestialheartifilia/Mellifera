@@ -620,7 +620,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Pollinate
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -728,7 +728,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12043f2e698d84e4bb91171b088cba95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentOrder: {fileID: 11400000, guid: 832c615067e71d8438a4b070e8184f8d, type: 2}
+  hybridRecipe1: {fileID: 11400000, guid: de5ba99c8df722b439b7abead4dce920, type: 2}
+  hybridRecipe2: {fileID: 11400000, guid: ea2c3798d8db2a641905e036cdfc458a, type: 2}
+  possibleNormalFlowers:
+  - {fileID: 11400000, guid: 1c91a42a6a1bf55428691984eaf301ce, type: 2}
+  - {fileID: 11400000, guid: 0885dd2906d783b41b651bae02d2c502, type: 2}
+  - {fileID: 11400000, guid: e539d02fbef1cae40994df907c9ebf25, type: 2}
+  wrapOptions:
+  - {fileID: 2641698482785147981, guid: d21db972bedf6724ba085abed020cf37, type: 3}
+  - {fileID: 7175521830830924091, guid: 5033ef0aeb82f2a48825a1b466e6657d, type: 3}
+  accessoryOptions:
+  - {fileID: -556663896244417668, guid: 299ff6e5adf67714095f96a774c07632, type: 3}
+  - {fileID: -26329759613171845, guid: 43361dccdcc03e74994c4a7f765ac6af, type: 3}
+  currentOrder: {fileID: 0}
 --- !u!4 &393628654
 Transform:
   m_ObjectHideFlags: 0
@@ -1268,7 +1280,6 @@ MonoBehaviour:
   orderManager: {fileID: 393628653}
   bee: {fileID: 91323106}
   pollinateButton: {fileID: 1662025711}
-  infoText: {fileID: 0}
   holdToGrowSeconds: 1.5
   seedGrowAnimator: {fileID: 0}
 --- !u!4 &1563805630
@@ -1401,7 +1412,7 @@ GameObject:
   - component: {fileID: 1662025712}
   - component: {fileID: 1662025711}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Pollination Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
