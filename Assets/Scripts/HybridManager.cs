@@ -4,198 +4,213 @@ using TMPro;
 
 public class HybridManager : MonoBehaviour
 {
-    //references
-    public OrderManager orderManager;          // provides the current recipe
-    public BeeInteractionDetector bee;         // tells us what flower/pot bee is touching
+    [Header("Scene References (drag these in Inspector)")]
+    public BeeInteractionDetector bee;       // detects currentFlower + nearPot
+    public HybridFormulas formulas;          // your code-only recipe checker
+    public Button pollinateButton;           // UI button
 
-    public Button pollinateButton;
-
+    [Header("Grow Settings")]
     public float holdToGrowSeconds = 1.5f;
-    public Animator seedGrowAnimator;          // Trigger name: "Grow"
+    public Animator seedGrowAnimator;        // optional, Trigger name: "Grow"
 
-    private enum State 
+    // Steps of the hybrid station
+    private enum Step
     {
-        NeedFirstFlower, 
-        NeedSecondFlower, 
-        GoToPot, 
-        Done 
-    
+        PickFirstFlower,   // pollinate 1/2
+        PickSecondFlower,  // pollinate 2/2
+        GrowAtPot          // hold space at pot
     }
 
-    private State state = State.NeedFirstFlower;
+    private Step step = Step.PickFirstFlower;
 
-    private FlowerData firstFlower;
-    private float holdTimer;
+    // Stored info for the current hybrid attempt
+    private bool hasFirstFlower = false;
+    private FlowerType firstFlowerType;
+    private FlowerType resultHybridType;
+
+    // Pot hold timer
+    private float holdTimer = 0f;
 
     void Start()
     {
+        // Safety checks (so you don't silently suffer)
+        if (bee == null) Debug.LogError("[HybridManager] BeeInteractionDetector reference missing.");
+        if (formulas == null) Debug.LogError("[HybridManager] HybridFormulas reference missing.");
+        if (pollinateButton == null) Debug.LogError("[HybridManager] Pollinate Button reference missing.");
 
+        // Hook up button click
         if (pollinateButton != null)
-            pollinateButton.onClick.AddListener(OnPollinatePressed);
-            Debug.Log("HybridManager started and listener added");
+            pollinateButton.onClick.AddListener(OnPollinateClicked);
 
-        SetPollinateInteractable(false);
+        // Start with button off until we touch a flower
+        SetPollinateButton(false);
     }
-
 
     void Update()
     {
+        // 1) Update button interactable state every frame
+        UpdatePollinateButton();
 
-        ////Get current recipe from OrderManager
-        //RecipeData recipe = GetCurrentRecipe();
-        //if (recipe == null)
-        //{
-        //    // No recipe means "no order yet" OR not assigned in inspector
-        //    SetPollinateInteractable(false);
-        //    return;
-        //}
-
-        RecipeData recipe = GetCurrentRecipe();
-
-        string recipeName = recipe != null ? recipe.name : "NULL";
-        string flowerName = (bee != null && bee.currentFlower != null) ? bee.currentFlower.name : "NONE";
-        string flowerDataName = (bee != null && bee.currentFlower != null && bee.currentFlower.data != null) ? bee.currentFlower.data.name : "NULL_DATA";
-
-        Debug.Log($"[Hybrid] recipe={recipeName} | flower={flowerName} | flowerData={flowerDataName} | state={state}");
-
-        //Enable/disable pollinate button
-        UpdatePollinateButton(recipe);
-
-        //Grow step
-        if (state == State.GoToPot)
-            HandlePotHold();
+        // 2) Handle pot growing only when we reached that step
+        if (step == Step.GrowAtPot)
+            UpdateGrowAtPot();
     }
 
-    RecipeData GetCurrentRecipe()
+    // ---------------------------
+    // BUTTON ENABLE/DISABLE LOGIC
+    // ---------------------------
+    void UpdatePollinateButton()
     {
-        if (orderManager == null) return null;
-        return orderManager.CurrentRecipe;
-    }
-
-    void UpdatePollinateButton(RecipeData recipe)
-    {
-        if (pollinateButton == null) return;
-
-        Flower currentFlower = bee.currentFlower;
-
-        FlowerData currentData = null;
-        if (currentFlower != null)
+        // If missing refs, keep it off
+        if (bee == null || formulas == null || pollinateButton == null)
         {
-            currentData = currentFlower.data;
-        }
-
-        bool canClick = false;
-
-        if (state == State.NeedFirstFlower)
-        {
-            // Any flower allowed for first pollination
-            canClick = (currentData != null);
-        }
-        else if (state == State.NeedSecondFlower)
-        {
-            // Second pollination must match the current recipe
-            if (firstFlower != null && currentData != null)
-            {
-                canClick = recipe.Matches(firstFlower, currentData);
-            }
-        }
-
-        pollinateButton.interactable = canClick;
-    }
-
-    void OnPollinatePressed()
-    {
-        Debug.Log("POLLINATE CLICKED");
-        RecipeData recipe = GetCurrentRecipe();
-        if (recipe == null) return;
-
-        Flower currentFlower = bee.currentFlower;
-
-        FlowerData currentData = null;
-        if (currentFlower != null)
-        {
-            currentData = currentFlower.data;
-        }
-        if (currentData == null) return;
-
-        if (state == State.NeedFirstFlower)
-        {
-            firstFlower = currentData;
-            state = State.NeedSecondFlower;
-
-            // Optional: force player to move to a new flower
-            bee.currentFlower = null;
+            SetPollinateButton(false);
             return;
         }
 
-        if (state == State.NeedSecondFlower)
+        // If not touching a flower, cannot pollinate
+        Flower touchingFlower = bee.currentFlower;
+        if (touchingFlower == null)
         {
-            bool valid = recipe.Matches(firstFlower, currentData);
-            if (!valid) return;
+            SetPollinateButton(false);
+            return;
+        }
 
-            state = State.GoToPot;
+        // Step 1: any flower is fine
+        if (step == Step.PickFirstFlower)
+        {
+            SetPollinateButton(true);
+            return;
+        }
+
+        // Step 2: only enable if the combo matches a valid formula
+        if (step == Step.PickSecondFlower)
+        {
+            if (!hasFirstFlower)
+            {
+                SetPollinateButton(false);
+                return;
+            }
+
+            FlowerType secondType = touchingFlower.type;
+
+            FlowerType tempResult;
+            bool valid = formulas.TryGetResult(firstFlowerType, secondType, out tempResult);
+
+            SetPollinateButton(valid);
+            return;
+        }
+
+        // Step 3: growing at pot, pollinate button is off
+        SetPollinateButton(false);
+    }
+
+    // ---------------------------
+    // WHEN PLAYER CLICKS POLLINATE
+    // ---------------------------
+    void OnPollinateClicked()
+    {
+        if (bee == null || formulas == null) return;
+        if (bee.currentFlower == null) return;
+
+        FlowerType currentType = bee.currentFlower.type;
+
+        // Step 1: store the first flower type
+        if (step == Step.PickFirstFlower)
+        {
+            firstFlowerType = currentType;
+            hasFirstFlower = true;
+            step = Step.PickSecondFlower;
+
+            // Optional: force player to move away so they can't double-click same flower
+            bee.currentFlower = null;
+
+            Debug.Log("[HybridManager] First flower selected: " + firstFlowerType);
+            return;
+        }
+
+        // Step 2: validate the combo and store the result
+        if (step == Step.PickSecondFlower)
+        {
+            FlowerType tempResult;
+            bool valid = formulas.TryGetResult(firstFlowerType, currentType, out tempResult);
+
+            if (!valid)
+            {
+                Debug.Log("[HybridManager] Invalid combination: " + firstFlowerType + " + " + currentType);
+                return;
+            }
+
+            resultHybridType = tempResult;
+            step = Step.GrowAtPot;
             holdTimer = 0f;
+
+            Debug.Log("[HybridManager] Combo OK: " + firstFlowerType + " + " + currentType + " -> " + resultHybridType);
         }
     }
 
-    void HandlePotHold()
+    // ---------------------------
+    // POT HOLD TO GROW
+    // ---------------------------
+    void UpdateGrowAtPot()
     {
+        // Must be touching pot
         if (!bee.nearPot)
         {
             holdTimer = 0f;
             return;
         }
 
+        // Hold Space to grow
         if (Input.GetKey(KeyCode.Space))
         {
             holdTimer += Time.deltaTime;
+
             if (holdTimer >= holdToGrowSeconds)
-                CompleteGrow();
+                FinishGrow();
         }
         else
         {
+            // Let go = reset timer
             holdTimer = 0f;
         }
     }
 
-    void CompleteGrow()
+    void FinishGrow()
     {
         holdTimer = 0f;
-        state = State.Done;
 
+        // Play grow animation (optional)
         if (seedGrowAnimator != null)
             seedGrowAnimator.SetTrigger("Grow");
 
-        if (orderManager != null)
-            orderManager.MarkHybridCompleted();
+        Debug.Log("[HybridManager] Grown hybrid result: " + resultHybridType);
 
-        Debug.Log("GROW COMPLETE (Order recipe version)");
+        // TODO next:
+        // - send resultHybridType to cutting minigame
+        // - add to inventory
 
-        if (orderManager != null && orderManager.HasMoreHybridsToMake)
-        {
-            // Customer wants another hybrid (Customer 3 case)
-            ResetStation();
-        }
-        else
-        {
-            // No more hybrids needed
-            // Next step: cutting / packing / delivery
-            Debug.Log("ALL HYBRIDS DONE FOR THIS CUSTOMER");
-        }
-
+        // For now: reset so you can test again
+        ResetStation();
     }
 
-    void SetPollinateInteractable(bool on)
+    // ---------------------------
+    // RESET
+    // ---------------------------
+    public void ResetStation()
+    {
+        step = Step.PickFirstFlower;
+        hasFirstFlower = false;
+        holdTimer = 0f;
+
+        SetPollinateButton(false);
+    }
+
+    void SetPollinateButton(bool on)
     {
         if (pollinateButton != null)
             pollinateButton.interactable = on;
     }
 
-    public void ResetStation()
-    {
-        state = State.NeedFirstFlower;
-        firstFlower = null;
-        holdTimer = 0f;
-    }
-}
 
+}

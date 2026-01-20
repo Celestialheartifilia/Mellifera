@@ -1,25 +1,24 @@
 using UnityEngine;
 
-public class CustomerOrder : MonoBehaviour
+public class CustomerOrder
 {
-    // What the customer wants
-    public RecipeData[] hybridRecipes;
     public int hybridCount;
-    public int hybridsMade;
 
-    public int normalCount;                // 0 or 1 for your design
-    public FlowerData normalFlower;        // which normal flower (if needed)
+    // What hybrids the customer wants (results only)
+    public FlowerType[] requiredHybrids;
 
-    // Packing wants (random every order)
+    public int normalCount;
+    public FlowerType normalFlower;
+
     public Sprite wrapIcon;
     public Sprite accessoryIcon;
 
-    // Progress tracking (what player already made)
+    public int hybridsMade;
     public int normalsPrepared;
 
-    // Helper: is the whole order done?
     public bool IsComplete()
     {
         return hybridsMade >= hybridCount && normalsPrepared >= normalCount;
     }
 }
+

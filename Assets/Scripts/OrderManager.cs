@@ -1,131 +1,159 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class OrderManager : MonoBehaviour
 {
-    public enum CustomerType
+
+    public BeeInteractionDetector bee;   // detects flower + pot
+    public HybridFormulas hybridFormulas;        // code-only recipes
+    public Button pollinateButton;
+
+    public float holdToGrowSeconds = 1.5f;
+    public Animator seedGrowAnimator;    // optional trigger: "Grow"
+
+    private enum State { NeedFirst, NeedSecond, GoToPot }
+    private State state = State.NeedFirst;
+
+    private bool hasFirst = false;
+    private FlowerType firstType;
+
+    private FlowerType resultType; // what we will grow after pot
+
+    private float holdTimer = 0f;
+
+    void Start()
     {
-        Customer1, // Hybrid 1
-        Customer2, // Hybrid 2 + 1 normal
-        Customer3  // Hybrid 1 + Hybrid 2
+        if (pollinateButton != null)
+            pollinateButton.onClick.AddListener(OnPollinatePressed);
+
+        pollinateButton.interactable = false;
     }
 
-    [Header("Fixed hybrid recipes (drag your RecipeData assets here)")]
-    public RecipeData hybridRecipe1;
-    public RecipeData hybridRecipe2;
-
-    [Header("Random pools (drag assets here)")]
-    public FlowerData[] possibleNormalFlowers;
-    public Sprite[] wrapOptions;
-    public Sprite[] accessoryOptions;
-
-    [Header("Current runtime order (debug view)")]
-    public CustomerOrder currentOrder;
-
-    private void Start()
+    void Update()
     {
-        // TEST ONLY: create a customer order automatically so HybridManager can run
-        if (currentOrder == null)
-        {
-            GenerateOrder(CustomerType.Customer1);
-            Debug.Log("[OrderManager] Generated Customer 1 order (test).");
-        }
+        UpdatePollinateButton();
+
+        if (state == State.GoToPot)
+            HandlePotHold();
     }
 
-    // HybridManager uses this to know what recipe to validate right now
-    public RecipeData CurrentRecipe
+    void UpdatePollinateButton()
     {
-        get
+        // Must be touching a flower to pollinate
+        Flower touchingFlower = bee.currentFlower;
+        if (touchingFlower == null)
         {
-            // No order = no recipe
-            if (currentOrder == null) return null;
-
-            // If we already made all required hybrids, no more recipe
-            if (currentOrder.hybridsMade >= currentOrder.hybridCount) return null;
-
-            // Get the next recipe to make
-            int index = currentOrder.hybridsMade;
-            return currentOrder.hybridRecipes[index];
-        }
-    }
-
-    public bool HasMoreHybridsToMake
-    {
-        get
-        {
-            if (currentOrder == null) return false;
-            return currentOrder.hybridsMade < currentOrder.hybridCount;
-        }
-    }
-
-    public void GenerateOrder(CustomerType customerType)
-    {
-        // Safety: if you forgot to assign recipes, tell you loudly
-        if (hybridRecipe1 == null || hybridRecipe2 == null)
-        {
-            Debug.LogError("[OrderManager] hybridRecipe1 or hybridRecipe2 is NOT assigned in Inspector.");
+            pollinateButton.interactable = false;
             return;
         }
 
-        currentOrder = new CustomerOrder();
-
-        // Random wrap + accessory for all customers
-        currentOrder.wrapIcon = PickRandom(wrapOptions);
-        currentOrder.accessoryIcon = PickRandom(accessoryOptions);
-
-        // Set what this customer wants
-        if (customerType == CustomerType.Customer1)
+        // Step 1: any flower is OK
+        if (state == State.NeedFirst)
         {
-            currentOrder.hybridRecipes = new RecipeData[] { hybridRecipe1 };
-            currentOrder.hybridCount = 1;
-
-            currentOrder.normalCount = 0;
-            currentOrder.normalFlower = null;
-        }
-        else if (customerType == CustomerType.Customer2)
-        {
-            currentOrder.hybridRecipes = new RecipeData[] { hybridRecipe2 };
-            currentOrder.hybridCount = 1;
-
-            currentOrder.normalCount = 1;
-            currentOrder.normalFlower = PickRandom(possibleNormalFlowers);
-        }
-        else // Customer3
-        {
-            currentOrder.hybridRecipes = new RecipeData[] { hybridRecipe1, hybridRecipe2 };
-            currentOrder.hybridCount = 2;
-
-            currentOrder.normalCount = 0;
-            currentOrder.normalFlower = null;
+            pollinateButton.interactable = true;
+            return;
         }
 
-        // Progress resets
-        currentOrder.hybridsMade = 0;
-        currentOrder.normalsPrepared = 0;
+        // Step 2: must match a recipe with the first flower
+        if (state == State.NeedSecond)
+        {
+            FlowerType secondType = touchingFlower.type;
 
-        Debug.Log($"[OrderManager] New order: {customerType} | CurrentRecipe={(CurrentRecipe != null ? CurrentRecipe.name : "NULL")}");
+            FlowerType tempResult;
+            bool valid = hybridFormulas.TryGetResult(firstType, secondType, out tempResult);
+
+            pollinateButton.interactable = valid;
+            return;
+        }
+
+        // Pot step: button off
+        pollinateButton.interactable = false;
     }
 
-    public void MarkHybridCompleted()
+    void OnPollinatePressed()
     {
-        if (currentOrder == null) return;
+        // Must be touching a flower
+        if (bee.currentFlower == null) return;
 
-        currentOrder.hybridsMade++;
-        Debug.Log($"[OrderManager] Hybrids made: {currentOrder.hybridsMade}/{currentOrder.hybridCount}");
+        FlowerType currentType = bee.currentFlower.type;
+
+        // First pollination: store the first flower type
+        if (state == State.NeedFirst)
+        {
+            firstType = currentType;
+            hasFirst = true;
+            state = State.NeedSecond;
+
+            // Optional: force player to move away
+            bee.currentFlower = null;
+
+            Debug.Log("[Hybrid] First flower chosen: " + firstType);
+            return;
+        }
+
+        // Second pollination: check recipe immediately
+        if (state == State.NeedSecond)
+        {
+            FlowerType tempResult;
+            bool valid = hybridFormulas.TryGetResult(firstType, currentType, out tempResult);
+
+            if (!valid)
+            {
+                Debug.Log("[Hybrid] Wrong combination.");
+                return;
+            }
+
+            // Save result and go to pot stage
+            resultType = tempResult;
+            state = State.GoToPot;
+            holdTimer = 0f;
+
+            Debug.Log("[Hybrid] Recipe OK: " + firstType + " + " + currentType + " -> " + resultType);
+        }
     }
 
-    public void MarkNormalCompleted()
+    void HandlePotHold()
     {
-        if (currentOrder == null) return;
+        // Must be near pot
+        if (!bee.nearPot)
+        {
+            holdTimer = 0f;
+            return;
+        }
 
-        currentOrder.normalsPrepared++;
-        Debug.Log($"[OrderManager] Normals prepared: {currentOrder.normalsPrepared}/{currentOrder.normalCount}");
+        // Hold space to grow
+        if (Input.GetKey(KeyCode.Space))
+        {
+            holdTimer += Time.deltaTime;
+
+            if (holdTimer >= holdToGrowSeconds)
+                CompleteGrow();
+        }
+        else
+        {
+            holdTimer = 0f;
+        }
     }
 
-    // ---------- Helpers ----------
-
-    private T PickRandom<T>(T[] array) where T : Object
+    void CompleteGrow()
     {
-        if (array == null || array.Length == 0) return null;
-        return array[Random.Range(0, array.Length)];
+        holdTimer = 0f;
+
+        if (seedGrowAnimator != null)
+            seedGrowAnimator.SetTrigger("Grow");
+
+        Debug.Log("[Hybrid] Grown hybrid: " + resultType);
+
+        // For now, reset so you can test again immediately
+        ResetStation();
+    }
+
+    public void ResetStation()
+    {
+        state = State.NeedFirst;
+        hasFirst = false;
+        holdTimer = 0f;
+        pollinateButton.interactable = false;
     }
 }
