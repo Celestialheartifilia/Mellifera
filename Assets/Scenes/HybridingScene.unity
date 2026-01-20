@@ -286,7 +286,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 91323100}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -466,7 +466,7 @@ Transform:
   m_GameObject: {fileID: 122848570}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.1, y: -3.44, z: 0}
+  m_LocalPosition: {x: 7.09, y: -3.47, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -728,18 +728,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12043f2e698d84e4bb91171b088cba95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hybridRecipe1: {fileID: 0}
-  hybridRecipe2: {fileID: 0}
-  possibleNormalFlowers: 000000000000000000000000
-  wrapOptions:
+  normalFlowerPool: 000000000100000002000000
+  wrapPool:
   - {fileID: 2641698482785147981, guid: d21db972bedf6724ba085abed020cf37, type: 3}
   - {fileID: 7175521830830924091, guid: 5033ef0aeb82f2a48825a1b466e6657d, type: 3}
-  accessoryOptions:
+  accessoryPool:
   - {fileID: -556663896244417668, guid: 299ff6e5adf67714095f96a774c07632, type: 3}
   - {fileID: -26329759613171845, guid: 43361dccdcc03e74994c4a7f765ac6af, type: 3}
-  currentOrder: {fileID: 0}
-  autoGenerateOrderOnStart: 1
-  testCustomerType: 0
+  autoStart: 1
 --- !u!4 &393628654
 Transform:
   m_ObjectHideFlags: 0
@@ -1120,7 +1116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c569e2dfe3a014941a0462ff79f7ee26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
+  type: 4
 --- !u!58 &798033701
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1258,7 +1254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c569e2dfe3a014941a0462ff79f7ee26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
+  type: 3
 --- !u!58 &808704777
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1596,8 +1592,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 570fc8deadd668c4891f26a362674825, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orderManager: {fileID: 393628653}
   bee: {fileID: 91323106}
+  formulas: {fileID: 634288781}
   pollinateButton: {fileID: 1662025711}
   holdToGrowSeconds: 1.5
   seedGrowAnimator: {fileID: 0}
@@ -1628,6 +1624,7 @@ GameObject:
   - component: {fileID: 1636430564}
   - component: {fileID: 1636430563}
   - component: {fileID: 1636430562}
+  - component: {fileID: 1636430567}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1718,6 +1715,14 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!222 &1636430567
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636430561}
+  m_CullTransparentMesh: 1
 --- !u!1 &1662025709
 GameObject:
   m_ObjectHideFlags: 0
@@ -1731,7 +1736,7 @@ GameObject:
   - component: {fileID: 1662025712}
   - component: {fileID: 1662025711}
   m_Layer: 5
-  m_Name: Pollination Button
+  m_Name: Pollinate Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1883,8 +1888,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 393628654}
   - {fileID: 1563805630}
+  - {fileID: 634288782}
   - {fileID: 594053347}
   - {fileID: 1457495883}
-  - {fileID: 2102814894}
   - {fileID: 1636430565}
-  - {fileID: 634288782}
+  - {fileID: 2102814894}

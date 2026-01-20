@@ -2,23 +2,26 @@ using UnityEngine;
 
 public class CustomerOrder
 {
-    public int hybridCount;
-
-    // What hybrids the customer wants (results only)
     public FlowerType[] requiredHybrids;
+    public bool normalRequired;
+    public FlowerType requiredNormal;
 
-    public int normalCount;
-    public FlowerType normalFlower;
-
+    //Packing visuals
     public Sprite wrapIcon;
     public Sprite accessoryIcon;
 
+    //How many hybrids the player has completed
     public int hybridsMade;
-    public int normalsPrepared;
+
+    //Whether the normal flower is done
+    public bool normalDone;
 
     public bool IsComplete()
     {
-        return hybridsMade >= hybridCount && normalsPrepared >= normalCount;
+        bool hybridsFinished = hybridsMade >= requiredHybrids.Length;
+        bool normalFinished = !normalRequired || normalDone;
+
+        return hybridsFinished && normalFinished;
     }
 }
 
