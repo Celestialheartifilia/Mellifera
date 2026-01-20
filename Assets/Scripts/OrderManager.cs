@@ -76,7 +76,7 @@ public class OrderManager : MonoBehaviour
     void ResetProgress()
     {
         currentOrder.hybridsMade = 0;
-        currentOrder.normalPrepared = false;
+        //currentOrder.normalPrepared = false;
     }
 
     // ASK: What hybrid should be made RIGHT NOW?
