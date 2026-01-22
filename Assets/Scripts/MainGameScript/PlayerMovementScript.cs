@@ -1,56 +1,53 @@
 using UnityEngine;
 
-/*Controls the bee movement prevents the player from moving outside the background */
 public class PlayerMovementScript : MonoBehaviour
 {
-    // Horizontal movement speed of the player
     public float speed = 8f;
-
-    // Background sprite used to define movement boundaries
     public SpriteRenderer background;
 
-    // Reference to the Rigidbody2D component
+    [Header("Direction objects (drag from Hierarchy)")]
+    public GameObject frontObj;
+    public GameObject backObj;
+    public GameObject leftObj;
+    public GameObject rightObj;
+
     Rigidbody2D rb;
 
-    // Awake runs once when the object is created
-    // Good place to cache component references
     void Awake()
     {
-        // Get the Rigidbody2D attached to this GameObject from monoscript :>
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponentInParent<Rigidbody2D>(); // IMPORTANT
+        ShowOnly(frontObj);
     }
 
-    // FixedUpdate is used for physics-related movement
     void FixedUpdate()
     {
-        // Get horizontal input:
-        // -1 = left, 0 = no input, 1 = right
         float x = Input.GetAxisRaw("Horizontal");
+        float y = Input.GetAxisRaw("Vertical");
 
-        // Move the player horizontally using physics
-        // Y velocity is preserved so gravity/jumping still works
-        rb.linearVelocity = new Vector2(
-            x * speed,
-            rb.linearVelocity.y
-        );
+        if (rb != null)
+            rb.linearVelocity = new Vector2(x * speed, rb.linearVelocity.y);
 
-        // If no background is assigned, skip clamping
-        if (background == null) return;
 
-        // Get the world-space bounds of the background sprite
+        // Swap visible direction object
+        if (x < 0) ShowOnly(leftObj);
+        else if (x > 0) ShowOnly(rightObj);
+        else if (y < 0) ShowOnly(frontObj);
+        else if (y > 0) ShowOnly(backObj);
+
+        // Optional clamp
+        if (background == null || rb == null) return;
+
         Bounds b = background.bounds;
+        float clampedX = Mathf.Clamp(rb.position.x, b.min.x, b.max.x);
+        float clampedY = Mathf.Clamp(rb.position.y, b.min.y, b.max.y);
+        rb.position = new Vector2(clampedX, clampedY);
+    }
 
-        // Clamp the player's X position so they stay inside the background
-        float clampedX = Mathf.Clamp(
-            rb.position.x,
-            b.min.x,   // left edge of background
-            b.max.x    // right edge of background
-        );
-
-        // Apply the clamped position back to the Rigidbody
-        rb.position = new Vector2(
-            clampedX,
-            rb.position.y
-        );
+    void ShowOnly(GameObject obj)
+    {
+        if (frontObj) frontObj.SetActive(obj == frontObj);
+        if (backObj) backObj.SetActive(obj == backObj);
+        if (leftObj) leftObj.SetActive(obj == leftObj);
+        if (rightObj) rightObj.SetActive(obj == rightObj);
     }
 }
