@@ -25,7 +25,8 @@ public class PlayerMovementScript : MonoBehaviour
         float y = Input.GetAxisRaw("Vertical");
 
         if (rb != null)
-            rb.velocity = new Vector2(x * speed, y * speed);
+            rb.linearVelocity = new Vector2(x * speed, rb.linearVelocity.y);
+
 
         // Swap visible direction object
         if (x < 0) ShowOnly(leftObj);
