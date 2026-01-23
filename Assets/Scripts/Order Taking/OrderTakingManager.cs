@@ -10,6 +10,7 @@ public class OrderTakingManager : MonoBehaviour
     public List<ItemsSOScript> accessoryItems;
 
     public OrderList currentOrder;
+    public OrderBubbleUI orderBubbleUI;
 
     public enum OrderType
     {
@@ -37,6 +38,8 @@ public class OrderTakingManager : MonoBehaviour
                 CreateBigOrder();
                 break;
         }
+
+        orderBubbleUI.DisplayOrder(currentOrder);
     }
 
     // Call this to add an item to the order

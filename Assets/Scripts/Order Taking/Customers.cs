@@ -18,6 +18,22 @@ public class Customers : MonoBehaviour
             orderTakingManager.CreateNewOrder(OrderTakingManager.OrderType.Small);
             Debug.Log(OrderTakingManager.OrderType.Small);
         }
+
+        //if (customer2 != null)
+        //{
+        //    customer2.SetActive(true);
+        //    Debug.Log("customer 2 order is medium");
+        //    orderTakingManager.CreateNewOrder(OrderTakingManager.OrderType.Medium);
+        //    Debug.Log(OrderTakingManager.OrderType.Medium);
+        //}
+
+        //if (customer3 != null)
+        //{
+        //    customer3.SetActive(true);
+        //    Debug.Log("customer 3 order is big");
+        //    orderTakingManager.CreateNewOrder(OrderTakingManager.OrderType.Big);
+        //    Debug.Log(OrderTakingManager.OrderType.Big);
+        //}
     }
 
     // Update is called once per frame
