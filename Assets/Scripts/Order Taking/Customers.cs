@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Customers : MonoBehaviour
 {
@@ -15,8 +16,9 @@ public class Customers : MonoBehaviour
         {
             customer1.SetActive(true);
             Debug.Log("customer 1 order is small");
-            orderTakingManager.CreateNewOrder(OrderTakingManager.OrderType.Small);
+            OrderTakingManager.Instance.CreateNewOrder(OrderTakingManager.OrderType.Small);
             Debug.Log(OrderTakingManager.OrderType.Small);
+            SceneManager.LoadScene("HybridingFlowerScene");
         }
 
         //if (customer2 != null)

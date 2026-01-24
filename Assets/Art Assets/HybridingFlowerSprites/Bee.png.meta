@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 983a1932198ef3c49aa26cc9fe578a9b
+guid: 2ec52a74fedb3fd4a97e0b12e1a01c7c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9157308492630387227
-    second: NPCOrdering_UI_0
+      213: -4240977330579911339
+    second: Untitled_Artwork_1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: NPCOrdering_UI_0
+      name: Untitled_Artwork_1_0
       rect:
         serializedVersion: 2
-        x: 16
-        y: 21
-        width: 882
-        height: 887
+        x: 37
+        y: 46
+        width: 124
+        height: 125
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5e519168174bae080800000000000000
-      internalID: -9157308492630387227
+      spriteID: 55dcc4666950525c0800000000000000
+      internalID: -4240977330579911339
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      NPCOrdering_UI_0: -9157308492630387227
+      Untitled_Artwork_1_0: -4240977330579911339
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -12,6 +12,20 @@ public class OrderTakingManager : MonoBehaviour
     public OrderList currentOrder;
     public OrderBubbleUI orderBubbleUI;
 
+    public static OrderTakingManager Instance;
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
     public enum OrderType
     {
         Small,

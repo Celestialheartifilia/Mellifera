@@ -14,6 +14,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainGameScene.unity
     guid: bc10a05b2fdad0d48918f95abc5aaffb
+  - enabled: 1
+    path: Assets/Scenes/OrderTakingScene.unity
+    guid: 085cbf05b35514148aea75e6fa9a5c0f
+  - enabled: 1
+    path: Assets/Scenes/HybridingFlowerScene.unity
+    guid: 2c22ad8ac9f3a354fa72cd7c0ffaff61
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
