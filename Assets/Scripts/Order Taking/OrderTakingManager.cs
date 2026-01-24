@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static OrderManager;
 
 public class OrderTakingManager : MonoBehaviour
 {
