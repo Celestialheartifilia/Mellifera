@@ -41,7 +41,7 @@ public class PollinationManager : MonoBehaviour
     public bool TryPlantInto(Pot pot)
     {
         if (ReadyHybrid == null) return false;
-        if (!pot.isEmpty) return false;
+        if (pot.growthState != Pot.FlowerGrowthState.Empty) return false;
 
         pot.Plant(ReadyHybrid);
         ResetPollination();

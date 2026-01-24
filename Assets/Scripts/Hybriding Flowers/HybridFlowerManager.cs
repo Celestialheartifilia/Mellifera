@@ -30,17 +30,31 @@ public class HybridFlowerManager : MonoBehaviour
         Debug.Log("Hybrids required: " + remainingRequiredHybrids.Count);
     }
 
-    public void OnHybridHarvested(ItemsSOScript harvestedHybrid)
+    public void OnHybridReadyToCut(ItemsSOScript hybrid)
     {
-        if (!remainingRequiredHybrids.Contains(harvestedHybrid))
-            return;
-
-        remainingRequiredHybrids.Remove(harvestedHybrid);
-
-        if (remainingRequiredHybrids.Count == 0)
+        if (!remainingRequiredHybrids.Contains(hybrid))
         {
-            Debug.Log("All hybrids completed!");
-            // enable next button / return to shop
+            Debug.Log("Hybrid grown, but not required for this order.");
+            return;
         }
+
+        Debug.Log("Hybrid ready to cut: " + hybrid.itemName);
+
+        //can do the cutting method here
     }
+
+    //not in used yet - only after cutting
+    //public void OnHybridHarvested(ItemsSOScript harvestedHybrid)
+    //{
+    //    if (!remainingRequiredHybrids.Contains(harvestedHybrid))
+    //        return;
+
+    //    remainingRequiredHybrids.Remove(harvestedHybrid);
+
+    //    if (remainingRequiredHybrids.Count == 0)
+    //    {
+    //        Debug.Log("All hybrids completed!");
+    //        // enable next button / return to shop
+    //    }
+    //}
 }

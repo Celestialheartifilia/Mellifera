@@ -5,12 +5,12 @@ public class BeeController : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public PollinationManager pollinationManager;
+    public Pot currentPot;
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
 
     private NormalFlower currentFlower;
-    private Pot currentPot;
 
     void Awake()
     {
@@ -89,6 +89,7 @@ public class BeeController : MonoBehaviour
         if (pot != null)
         {
             currentPot = pot;
+            Debug.Log("Detected pot");
         }
     }
 
