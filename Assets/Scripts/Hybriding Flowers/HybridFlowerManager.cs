@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HybridFlowerSceneManager : MonoBehaviour
+public class HybridFlowerManager : MonoBehaviour
 {
     private OrderTakingManager orderTakingManager;
 
-    public List<ItemsSOScript> requiredHybrids = new List<ItemsSOScript>();
+    public List<ItemsSOScript> remainingRequiredHybrids = new();
 
     void Start()
     {
         orderTakingManager = OrderTakingManager.Instance;
 
-        requiredHybrids.Clear();
+        remainingRequiredHybrids.Clear();
 
         if (orderTakingManager == null || orderTakingManager.currentOrder == null)
         {
@@ -23,24 +23,24 @@ public class HybridFlowerSceneManager : MonoBehaviour
         {
             if (orderTakingManager.hybridFlowerItems.Contains(item))
             {
-                requiredHybrids.Add(item);
+                remainingRequiredHybrids.Add(item);
             }
         }
 
-        Debug.Log("Required hybrids: " + requiredHybrids.Count);
+        Debug.Log("Hybrids required: " + remainingRequiredHybrids.Count);
     }
 
     public void OnHybridHarvested(ItemsSOScript harvestedHybrid)
     {
-        if (requiredHybrids.Contains(harvestedHybrid))
-        {
-            requiredHybrids.Remove(harvestedHybrid);
+        if (!remainingRequiredHybrids.Contains(harvestedHybrid))
+            return;
 
-            if (requiredHybrids.Count == 0)
-            {
-                Debug.Log("All hybrids done!");
-                // next scene / return to shop later
-            }
+        remainingRequiredHybrids.Remove(harvestedHybrid);
+
+        if (remainingRequiredHybrids.Count == 0)
+        {
+            Debug.Log("All hybrids completed!");
+            // enable next button / return to shop
         }
     }
 }

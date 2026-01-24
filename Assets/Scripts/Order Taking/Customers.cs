@@ -18,7 +18,6 @@ public class Customers : MonoBehaviour
             Debug.Log("customer 1 order is small");
             OrderTakingManager.Instance.CreateNewOrder(OrderTakingManager.OrderType.Small);
             Debug.Log(OrderTakingManager.OrderType.Small);
-            SceneManager.LoadScene("HybridingFlowerScene");
         }
 
         //if (customer2 != null)

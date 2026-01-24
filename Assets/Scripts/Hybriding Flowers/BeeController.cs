@@ -20,20 +20,19 @@ public class BeeController : MonoBehaviour
 
     void Update()
     {
-        moveInput = new Vector2(
-            Input.GetAxisRaw("Horizontal"),
-            Input.GetAxisRaw("Vertical")
-        ).normalized;
+        moveInput = new Vector2(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical")).normalized;
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("pollinating");
             TryPollinate();
         }
             
 
         if (Input.GetKeyDown(KeyCode.Space))
+        {
             TryPlant();
+        }
+            
     }
 
     void FixedUpdate()
@@ -45,12 +44,12 @@ public class BeeController : MonoBehaviour
     {
         if (currentFlower == null)
         {
-            Debug.Log("null current flower");
+            Debug.Log("Not on flower");
             return;
         }
         if (currentFlower.isPollinated)
         {
-            Debug.Log("pollinated current flower");
+            Debug.Log("Flower is already pollinated");
             return;
         }
 
@@ -64,7 +63,10 @@ public class BeeController : MonoBehaviour
 
     void TryPlant()
     {
-        if (currentPot == null) return;
+        if (currentPot == null) 
+        {
+            return;
+        }
 
         bool planted = pollinationManager.TryPlantInto(currentPot);
         if (planted)
