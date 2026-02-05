@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b553424289d4a7441af93ba2a94f40a0
+guid: 0dffe8bc618c55845ac3d07687f4e3c1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8907533129301572090
-    second: CuttedFlower_0
+      213: -6700472185959037515
+    second: leaf2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CuttedFlower_0
+      name: leaf2_0
       rect:
         serializedVersion: 2
-        x: 53
-        y: 0
-        width: 374
-        height: 414
+        x: 235
+        y: 257
+        width: 40
+        height: 43
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 606c4f220d5126480800000000000000
-      internalID: -8907533129301572090
+      spriteID: 5b5c6882c042303a0800000000000000
+      internalID: -6700472185959037515
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      CuttedFlower_0: -8907533129301572090
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
