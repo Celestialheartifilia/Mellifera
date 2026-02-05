@@ -7,6 +7,9 @@ public class HybridFlowerManager : MonoBehaviour
 
     public List<ItemsSOScript> remainingRequiredHybrids = new();
 
+
+
+
     void Start()
     {
         orderTakingManager = OrderTakingManager.Instance;
@@ -28,6 +31,7 @@ public class HybridFlowerManager : MonoBehaviour
         }
 
         Debug.Log("Hybrids required: " + remainingRequiredHybrids.Count);
+
     }
 
     public void OnHybridReadyToCut(ItemsSOScript hybrid)
