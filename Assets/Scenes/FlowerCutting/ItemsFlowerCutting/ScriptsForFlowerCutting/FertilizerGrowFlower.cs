@@ -4,43 +4,40 @@ using UnityEngine;
 public class FertilizerGrowFlower : MonoBehaviour
 {
     [Header("Assign in Inspector")]
-    public GameObject flowerObject;   // Flower to appear
-    public Collider2D potCollider;    // Pot collider
+    public Pot pot;                
+    public Collider2D potCollider;
 
     Vector3 originalPosition;
     bool triggered = false;
 
     void Start()
     {
-        // Save fertilizer starting position
         originalPosition = transform.position;
-
-        // Hide flower at start
-        if (flowerObject != null)
-            flowerObject.SetActive(false);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (triggered) return;
+        if (other != potCollider) return;
 
-        // Detect pot WITHOUT using tag
-        if (other == potCollider)
+        triggered = true;
+
+        bool success = pot.Fertilise();
+
+        if (success)
         {
-            triggered = true;
-            StartCoroutine(GrowAndReturn());
+            StartCoroutine(ReturnFertiliser());
+        }
+        else
+        {
+            triggered = false; // allow retry if fertilising failed
         }
     }
 
-    IEnumerator GrowAndReturn()
+    IEnumerator ReturnFertiliser()
     {
-        yield return new WaitForSeconds(2f);
-
-        // Show flower
-        if (flowerObject != null)
-            flowerObject.SetActive(true);
-
-        // Return fertilizer to original position
+        yield return new WaitForSeconds(1f);
         transform.position = originalPosition;
+        triggered = false;
     }
 }

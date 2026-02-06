@@ -3,22 +3,20 @@ using UnityEngine.SceneManagement;
 
 public class FlowerCutSwap : MonoBehaviour
 {
-    // This is the picture of the flower BEFORE cutting
-    public Sprite uncutSprite;
+    public ItemsSOScript flowerItemData;
 
     [Header("Things we spawn")]
     public GameObject cutFlowerPrefab;   // The flower top that appears after cutting
-    public GameObject stemPiecePrefab;   // The stem that falls down
 
     [Header("UI")]
-    public GameObject CollectCanvas;     // The "Flower Collected!" popup
+    public GameObject hybridFlowerCollectPopup;     // The "Flower Collected!" popup
 
     [Header("Scene")]
     public string sceneName;             // The place we go when player presses Home
 
     [Header("Pictures")]
     public Sprite cutFlowerSprite;       // Picture for the cut flower
-    public Sprite stemPieceSprite;       // Picture for the stem
+ 
 
     SpriteRenderer sr;   // Lets us change the flower picture
     bool cutDone;        // So we don't cut again and again
@@ -28,13 +26,9 @@ public class FlowerCutSwap : MonoBehaviour
         // Get the flower picture component
         sr = GetComponent<SpriteRenderer>();
 
-        // Show the flower BEFORE cutting
-        if (uncutSprite != null)
-            sr.sprite = uncutSprite;
-
         // Hide the popup at the start
-        if (CollectCanvas != null)
-            CollectCanvas.SetActive(false);
+        if (hybridFlowerCollectPopup != null)
+             hybridFlowerCollectPopup.SetActive(false);
     }
 
     // ?? THIS is the button function (Home button will call this)
@@ -78,32 +72,22 @@ public class FlowerCutSwap : MonoBehaviour
 
             // When player clicks flower ? show popup + remove flower
             var clickHandler = cutFlower.AddComponent<CutFlowerClick_Internal>();
-            clickHandler.collectCanvas = CollectCanvas;
-        }
-
-        // ?? Create the falling stem
-        if (stemPiecePrefab != null)
-        {
-            var stem = Instantiate(stemPiecePrefab, transform.position, Quaternion.identity);
-
-            var ssr = stem.GetComponent<SpriteRenderer>();
-            if (ssr != null && stemPieceSprite != null)
-                ssr.sprite = stemPieceSprite;
+            clickHandler.hybridFlowerCollectPopup = hybridFlowerCollectPopup;
+            //clickHandler.itemData = flowerItemData;
         }
     }
 
     // ?? This handles clicking the CUT flower
     private class CutFlowerClick_Internal : MonoBehaviour
     {
-        public GameObject collectCanvas;
+        public GameObject hybridFlowerCollectPopup;
 
         void OnMouseDown()
         {
-            // Show "Flower Collected!" popup
-            if (collectCanvas != null)
-                collectCanvas.SetActive(true);
+            if (hybridFlowerCollectPopup != null)
+                hybridFlowerCollectPopup.SetActive(true);
 
-            // Make the flower disappear
+
             Destroy(gameObject);
         }
     }
