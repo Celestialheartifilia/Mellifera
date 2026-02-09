@@ -73,7 +73,7 @@ public class FlowerCutSwap : MonoBehaviour
             // When player clicks flower ? show popup + remove flower
             var clickHandler = cutFlower.AddComponent<CutFlowerClick_Internal>();
             clickHandler.hybridFlowerCollectPopup = hybridFlowerCollectPopup;
-            //clickHandler.itemData = flowerItemData;
+            clickHandler.hybridData = flowerItemData;
         }
     }
 
@@ -81,11 +81,18 @@ public class FlowerCutSwap : MonoBehaviour
     private class CutFlowerClick_Internal : MonoBehaviour
     {
         public GameObject hybridFlowerCollectPopup;
+        public ItemsSOScript hybridData;
 
         void OnMouseDown()
         {
             if (hybridFlowerCollectPopup != null)
+            {
                 hybridFlowerCollectPopup.SetActive(true);
+            }
+                
+
+            // use the data that was passed in
+            GameState.Instance.AddHybrid(hybridData);
 
 
             Destroy(gameObject);
