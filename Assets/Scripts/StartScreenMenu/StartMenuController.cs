@@ -8,6 +8,17 @@ public class StartMenuController : MonoBehaviour
         SceneManager.LoadScene("MainGameScene");
     }
 
+    public void OpenOptions()
+    {
+        // "Additive" keeps the current scene active underneath
+        SceneManager.LoadScene("OptionMenuScene", LoadSceneMode.Additive);
+    }
+
+    public void CloseOptions()
+    {
+        SceneManager.UnloadSceneAsync("OptionMenuScene");
+    }
+
     public void OnExitClick()
     {
 #if UNITY_EDITOR
@@ -15,4 +26,6 @@ public class StartMenuController : MonoBehaviour
 #endif
         Application.Quit();
     }
+
+   
 }
