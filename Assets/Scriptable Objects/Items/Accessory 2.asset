@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c9284d9b5a02ed4c84c7d1fe96bbbf6, type: 3}
   m_Name: Accessory 2
   m_EditorClassIdentifier: 
+  itemID: 
   itemName: Accessory 2
-  itemSprite: {fileID: -26329759613171845, guid: 43361dccdcc03e74994c4a7f765ac6af, type: 3}
+  itemSprite: {fileID: -8389251026795439679, guid: 196c9e0f7f1cbbd4e84c8dab563c5ccf, type: 3}

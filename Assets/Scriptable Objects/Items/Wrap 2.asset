@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c9284d9b5a02ed4c84c7d1fe96bbbf6, type: 3}
   m_Name: Wrap 2
   m_EditorClassIdentifier: 
+  itemID: 
   itemName: Wrap 2
-  itemSprite: {fileID: 7175521830830924091, guid: 5033ef0aeb82f2a48825a1b466e6657d, type: 3}
+  itemSprite: {fileID: 8071091206810553418, guid: facb68b74f8b17f438eef88cc6498df9, type: 3}

@@ -8,9 +8,18 @@ public class LeafDispose : MonoBehaviour
     [Header("Behaviour")]
     public bool destroyInsteadOfDisable = true;
 
+    LeafTracker leafTracker;
+
+    void Start()
+    {
+        leafTracker = GetComponentInParent<LeafTracker>();
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other != binCollider) return;
+
+        leafTracker?.NotifyLeafRemoved();
 
         if (destroyInsteadOfDisable)
             Destroy(gameObject);
