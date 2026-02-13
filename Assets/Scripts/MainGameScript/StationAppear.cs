@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StationAppear : MonoBehaviour
 {
@@ -9,7 +9,8 @@ public class StationAppear : MonoBehaviour
     {
         if (button != null)
             button.SetActive(false);
-        Console.WriteLine("Working");
+
+        Debug.Log("Working");
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -23,4 +24,7 @@ public class StationAppear : MonoBehaviour
         if (other.GetComponent<PlayerMovementScript>() != null)
             button.SetActive(false);
     }
+
+
+
 }
