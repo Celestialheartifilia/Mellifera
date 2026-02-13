@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class PackingManager : MonoBehaviour
 {
@@ -42,6 +43,11 @@ public class PackingManager : MonoBehaviour
     ItemsSOScript selectedWrap;
     ItemsSOScript selectedAccessory;
 
+    [Header("UI Order")]
+    [SerializeField] GameObject CorrectOrderPrompt;
+    [SerializeField] GameObject WrongOrderPrompt;
+
+
     bool leavesPlucked = false;
 
     void Start()
@@ -61,6 +67,10 @@ public class PackingManager : MonoBehaviour
 
         hybridButton1.gameObject.SetActive(false);
         hybridButton2.gameObject.SetActive(false);
+
+        //Hide Order Prompt first
+        CorrectOrderPrompt.SetActive(false);
+        WrongOrderPrompt.SetActive(false);
 
         // Disable wrap + accessory UI initially
         SetWrapAccessoryButtons(false);
@@ -174,6 +184,9 @@ public class PackingManager : MonoBehaviour
         ValidateOrder();
     }
 
+
+
+
     void ValidateOrder()
     {
         var order = OrderTakingManager.Instance.currentOrder;
@@ -185,11 +198,16 @@ public class PackingManager : MonoBehaviour
         if (flowerCorrect && wrapCorrect && accessoryCorrect)
         {
             Debug.Log("Order completed successfully!");
+            CorrectOrderPrompt.SetActive(true);
         }
         else
         {
             Debug.Log("Order incorrect!");
+            WrongOrderPrompt.SetActive(true);
+
         }
+
+
     }
 
 }
