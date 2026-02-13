@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class PollinationManager : MonoBehaviour
 {
@@ -9,6 +10,11 @@ public class PollinationManager : MonoBehaviour
 
     //Temporarily stores the two normal flowers the player pollinated into a list with a capacity of 2 -> players can only pollinate 2 different flower
     private readonly List<ItemsSOScript> pickedFlowers = new List<ItemsSOScript>(2);
+
+    [Header("VisualIndicators")]
+    public GameObject Hybrid1;
+    public GameObject Hybrid2;
+    public GameObject Hybrid3;
 
     //Stores the final hybrid result -> Acts as the “output” of pollination
     public ItemsSOScript ReadyHybrid { get; private set; }
