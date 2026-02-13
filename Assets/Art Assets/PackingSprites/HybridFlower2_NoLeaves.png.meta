@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      HybridFlower2_NoLeaves_0: -6673833099384587015
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
