@@ -3,9 +3,9 @@ using UnityEngine;
 public class PlayerMovementScript : MonoBehaviour
 {
     public float speed = 8f;
-    public SpriteRenderer background;
+    public Camera cam;
 
-    [Header("Direction objects (drag from Hierarchy)")]
+    [Header("Direction animation objects")]
     public GameObject frontObj;
     public GameObject backObj;
     public GameObject leftObj;
@@ -15,32 +15,40 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Awake()
     {
-        rb = GetComponentInParent<Rigidbody2D>(); // IMPORTANT
-        ShowOnly(frontObj);
+        rb = GetComponent<Rigidbody2D>();
+
+        if (cam == null)
+            cam = Camera.main;
+
+        ShowOnly(frontObj); // start facing front
     }
 
     void FixedUpdate()
     {
-        float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
+        // Get mouse world position EVERY frame
+        Vector3 mouse = Input.mousePosition;
+        Vector3 world = cam.ScreenToWorldPoint(mouse);
 
-        if (rb != null)
-            rb.linearVelocity = new Vector2(x * speed, rb.linearVelocity.y);
+        Vector2 targetPos = new Vector2(world.x, world.y);
+        Vector2 current = rb.position;
 
+        // Move toward mouse
+        Vector2 newPos = Vector2.MoveTowards(current, targetPos, speed * Time.fixedDeltaTime);
+        rb.MovePosition(newPos);
 
-        // Swap visible direction object
-        if (x < 0) ShowOnly(leftObj);
-        else if (x > 0) ShowOnly(rightObj);
-        else if (y < 0) ShowOnly(frontObj);
-        else if (y > 0) ShowOnly(backObj);
+        Vector2 dir = targetPos - current;
 
-        // Optional clamp
-        if (background == null || rb == null) return;
-
-        Bounds b = background.bounds;
-        float clampedX = Mathf.Clamp(rb.position.x, b.min.x, b.max.x);
-        float clampedY = Mathf.Clamp(rb.position.y, b.min.y, b.max.y);
-        rb.position = new Vector2(clampedX, clampedY);
+        // Direction animation
+        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+        {
+            if (dir.x > 0) ShowOnly(rightObj);
+            else ShowOnly(leftObj);
+        }
+        else
+        {
+            if (dir.y > 0) ShowOnly(backObj);
+            else ShowOnly(frontObj);
+        }
     }
 
     void ShowOnly(GameObject obj)

@@ -1,20 +1,17 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+
+
 public class StationSwapManagent : MonoBehaviour
 {
-    public void LoadHybridScene()
+
+    [SerializeField] private string sceneName;
+
+    void OnMouseDown()
     {
-        SceneManager.LoadScene("HybridingFlowerScene");
+        SceneManager.LoadScene(sceneName);
     }
 
-    public void LoadPackagingScene()
-    {
-        SceneManager.LoadScene("PackingScene");
-    }
-
-    public void LoadCustomerOrderScene()
-    {
-        SceneManager.LoadScene("OrderTakingScene");
-    }
 }
