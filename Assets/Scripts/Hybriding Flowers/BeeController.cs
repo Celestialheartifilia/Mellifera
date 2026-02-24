@@ -1,5 +1,6 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using System.Collections;
 
 public class BeeController : MonoBehaviour
 {
@@ -12,10 +13,22 @@ public class BeeController : MonoBehaviour
 
     private NormalFlower currentFlower;
 
+    [Header("Visual Indicators")]
+    public GameObject NeedToPollinate;
+    public GameObject FlowerPollinatedAlready;
+    public GameObject PressSpacebarToPlant;
+    public GameObject PlantedSuccessfully;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
+
+        //Set false to not Appear first 
+        NeedToPollinate.SetActive(false);
+        FlowerPollinatedAlready.SetActive(false);
+        PressSpacebarToPlant.SetActive(false);
+        PlantedSuccessfully.SetActive(false);
     }
 
     void Update()
@@ -31,6 +44,7 @@ public class BeeController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             TryPlant();
+            StartCoroutine(ShowForSeconds(PlantedSuccessfully, 0.5f));
         }
             
     }
@@ -49,6 +63,7 @@ public class BeeController : MonoBehaviour
         }
         if (currentFlower.isPollinated)
         {
+            StartCoroutine(ShowForSeconds(FlowerPollinatedAlready, 0.5f));
             Debug.Log("Flower is already pollinated");
             return;
         }
@@ -59,6 +74,14 @@ public class BeeController : MonoBehaviour
             currentFlower.SetPollinated(true);
             Debug.Log(currentFlower);
         }
+    }
+
+    //Show for a few seconds
+    IEnumerator ShowForSeconds(GameObject obj, float seconds)
+    {
+        obj.SetActive(true);
+        yield return new WaitForSeconds(seconds);
+        obj.SetActive(false);
     }
 
     void TryPlant()
@@ -83,6 +106,7 @@ public class BeeController : MonoBehaviour
         {
             currentFlower = flower;
             Debug.Log("Detected flower: " + flower.name);
+            StartCoroutine(ShowForSeconds(NeedToPollinate, 0.5f));
         }
 
         Pot pot = other.GetComponentInParent<Pot>();
@@ -90,6 +114,7 @@ public class BeeController : MonoBehaviour
         {
             currentPot = pot;
             Debug.Log("Detected pot");
+            StartCoroutine(ShowForSeconds(PressSpacebarToPlant, 1f));
         }
     }
 

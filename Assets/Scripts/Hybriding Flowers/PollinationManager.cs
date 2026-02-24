@@ -1,6 +1,7 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
 
 public class PollinationManager : MonoBehaviour
 {
@@ -11,10 +12,24 @@ public class PollinationManager : MonoBehaviour
     //Temporarily stores the two normal flowers the player pollinated into a list with a capacity of 2 -> players can only pollinate 2 different flower
     private readonly List<ItemsSOScript> pickedFlowers = new List<ItemsSOScript>(2);
 
-    [Header("VisualIndicators")]
-    public GameObject Hybrid1;
-    public GameObject Hybrid2;
-    public GameObject Hybrid3;
+
+    //Visual Indicators
+    [Header("Visual Indicators")]
+    public GameObject WrongPollinationTryAgain;
+    public GameObject HybridIsReady;
+
+    IEnumerator ShowForSeconds(GameObject obj, float seconds)
+    {
+        obj.SetActive(true);
+        yield return new WaitForSeconds(seconds);
+        obj.SetActive(false);
+    }
+
+    void Awake()
+    {
+        WrongPollinationTryAgain.SetActive(false);
+        HybridIsReady.SetActive(false);
+    }
 
     //Stores the final hybrid result -> Acts as the “output” of pollination
     public ItemsSOScript ReadyHybrid { get; private set; }
@@ -25,6 +40,7 @@ public class PollinationManager : MonoBehaviour
         pickedFlowers.Clear();
         ReadyHybrid = null;
     }
+
 
     public bool TryAddPollinatedFlower(ItemsSOScript normalFlower)
     {
@@ -57,6 +73,7 @@ public class PollinationManager : MonoBehaviour
             if (result == null)
             {
                 Debug.Log("Invalid combo. Resetting.");
+                StartCoroutine(ShowForSeconds(WrongPollinationTryAgain, 1f));
                 //reset
                 ResetPollination();
                 return false;
@@ -65,6 +82,7 @@ public class PollinationManager : MonoBehaviour
             //if have results -> store the result in ReadyHybrid
             ReadyHybrid = result;
             Debug.Log($"[POLLINATION] Hybrid ready: {ReadyHybrid.itemName}");
+            StartCoroutine(ShowForSeconds(HybridIsReady, 0.5f));
         }
 
         return true;
