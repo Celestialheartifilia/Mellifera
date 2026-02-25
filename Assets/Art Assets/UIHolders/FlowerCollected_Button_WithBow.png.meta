@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      FlowerCollected_Button_WithBow_0: 2444546139667382452
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
