@@ -58,4 +58,7 @@ public class PlayerMovementScript : MonoBehaviour
         if (leftObj) leftObj.SetActive(obj == leftObj);
         if (rightObj) rightObj.SetActive(obj == rightObj);
     }
+
+
+
 }

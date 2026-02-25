@@ -19,6 +19,7 @@ public class DragToMove2D : MonoBehaviour
         dragging = true;
         Vector2 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
         offset = rb.position - mouseWorld;
+        transform.parent = null;
     }
 
     void OnMouseUp() => dragging = false;

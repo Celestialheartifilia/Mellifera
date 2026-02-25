@@ -5,7 +5,7 @@ public class Pot : MonoBehaviour
     [Header("Tool Colliders")]
     public Collider2D fertiliserCollider;
     public Collider2D scissorsCollider;
-    public GameObject BeeGone;
+    //public GameObject BeeGone;
 
     [Header("UI (Optional)")]
     public GameObject toolsReadyPopup;
@@ -47,10 +47,10 @@ public class Pot : MonoBehaviour
             scissorsCollider.enabled = false;
         }
         //set the bee to active
-        if (BeeGone != null)
+       /* if (BeeGone != null)
         {
             BeeGone.SetActive(true);
-        }
+        } */
         //hides UI for tools ready pop up
         if (toolsReadyPopup != null)
         {
@@ -135,10 +135,10 @@ public class Pot : MonoBehaviour
             scissorsCollider.enabled = true;
         }
 
-        if (BeeGone != null)
+        /*if (BeeGone != null)
         {
             BeeGone.SetActive(false);
-        }
+        }*/
 
         // Optional popup
         if (toolsReadyPopup != null)

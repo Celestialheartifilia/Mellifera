@@ -1,19 +1,13 @@
 fileFormatVersion: 2
-guid: 0a078e3008148ae42b38caaad5769508
+guid: 90b9069a959b60d4d82f3fad6853b04f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2413684467337298611
-    second: Bop_Back_0
+      213: -151729693269251711
+    second: MainCharacterFly_ToRight-6_0
   - first:
-      213: -3246970588427865622
-    second: Bop_Back_1
-  - first:
-      213: -2636714409741076742
-    second: Bop_Back_2
-  - first:
-      213: 4663687618141803383
-    second: Bop_Back_3
+      213: 3679949161597599442
+    second: MainCharacterFly_ToRight-6_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,35 +103,35 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Bop_Back_0
+      name: MainCharacterFly_ToRight-6_0
       rect:
         serializedVersion: 2
-        x: 13
-        y: 27
-        width: 521
-        height: 784
+        x: 0
+        y: 0
+        width: 646
+        height: 926
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3b2848b1c312f7120800000000000000
-      internalID: 2413684467337298611
+      spriteID: 189aecad5a2f4edf0800000000000000
+      internalID: -151729693269251711
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bop_Back_1
+      name: MainCharacterFly_ToRight-6_1
       rect:
         serializedVersion: 2
-        x: 14
-        y: 17
-        width: 521
-        height: 794
+        x: 68
+        y: 11
+        width: 440
+        height: 62
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -146,52 +140,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ae1bd98f37170f2d0800000000000000
-      internalID: -3246970588427865622
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bop_Back_2
-      rect:
-        serializedVersion: 2
-        x: 543
-        y: 445
-        width: 8
-        height: 15
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: af6ba39d632886bd0800000000000000
-      internalID: -2636714409741076742
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bop_Back_3
-      rect:
-        serializedVersion: 2
-        x: 550
-        y: 397
-        width: 6
-        height: 23
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 773dabeed2fb8b040800000000000000
-      internalID: 4663687618141803383
+      spriteID: 2de7588e34ec11330800000000000000
+      internalID: 3679949161597599442
       vertices: []
       indices: 
       edges: []
@@ -200,7 +150,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 550737584e1150e4ebe0c494901799fa
+    spriteID: 9ae9ef15ff181b54d946e73504d3829b
     internalID: 0
     vertices: []
     indices: 
@@ -210,10 +160,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Bop_Back_0: 2413684467337298611
-      Bop_Back_1: -3246970588427865622
-      Bop_Back_2: -2636714409741076742
-      Bop_Back_3: 4663687618141803383
+      MainCharacterFly_ToRight-6_0: -151729693269251711
+      MainCharacterFly_ToRight-6_1: 3679949161597599442
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

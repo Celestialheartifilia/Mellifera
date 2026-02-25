@@ -1,6 +1,7 @@
+using System.Collections;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using System.Collections;
+using UnityEngine.LightTransport;
 
 public class BeeController : MonoBehaviour
 {
@@ -10,6 +11,14 @@ public class BeeController : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
+
+
+    [Header("Direction animation objects")]
+    public GameObject frontObj;
+    public GameObject backObj;
+    public GameObject leftObj;
+    public GameObject rightObj;
+
 
     private NormalFlower currentFlower;
 
@@ -24,16 +33,59 @@ public class BeeController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
 
+        ShowOnly(frontObj); // start facing front
+
         //Set false to not Appear first 
         NeedToPollinate.SetActive(false);
         FlowerPollinatedAlready.SetActive(false);
         PressSpacebarToPlant.SetActive(false);
         PlantedSuccessfully.SetActive(false);
+
+
     }
 
     void Update()
     {
-        moveInput = new Vector2(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical")).normalized;
+
+        // Mouse follow
+        // Always auto-follow mouse
+        // Always auto-follow mouse (correct ScreenToWorldPoint z)
+        
+        Camera mainCam = Camera.main;
+        if (mainCam == null)
+        {
+            Debug.LogError("No MainCamera found. Tag your camera as MainCamera.");
+            return;
+        }
+
+        Vector3 mp = Input.mousePosition;
+        mp.z = -mainCam.transform.position.z;   // distance from camera to your 2D plane (usually 10)
+
+        Vector3 mouseWorld = mainCam.ScreenToWorldPoint(mp);
+        mouseWorld.z = 0f;
+
+        Vector2 dir = (Vector2)(mouseWorld - transform.position);
+
+        // optional stop when very close
+        if (dir.magnitude < 0.1f) moveInput = Vector2.zero;
+        else moveInput = dir.normalized;
+
+        //------------------------------------------------
+
+        // Direction animation
+        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+        {
+            if (dir.x > 0) ShowOnly(rightObj);
+            else ShowOnly(leftObj);
+        }
+        else
+        {
+            if (dir.y > 0) ShowOnly(backObj);
+            else ShowOnly(frontObj);
+        }
+
+
+        // moveInput = new Vector2(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical")).normalized;
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -46,6 +98,7 @@ public class BeeController : MonoBehaviour
             TryPlant();
             StartCoroutine(ShowForSeconds(PlantedSuccessfully, 0.5f));
         }
+
             
     }
 
@@ -53,6 +106,16 @@ public class BeeController : MonoBehaviour
     {
         rb.linearVelocity = moveInput * moveSpeed;
     }
+
+
+    void ShowOnly(GameObject obj)
+    {
+        if (frontObj) frontObj.SetActive(obj == frontObj);
+        if (backObj) backObj.SetActive(obj == backObj);
+        if (leftObj) leftObj.SetActive(obj == leftObj);
+        if (rightObj) rightObj.SetActive(obj == rightObj);
+    }
+
 
     void TryPollinate()
     {
@@ -131,6 +194,18 @@ public class BeeController : MonoBehaviour
         {
             currentPot = null;
         }
+
+
+
+
+
     }
+
+
+
+
+
+
+
 
 }
