@@ -7,8 +7,11 @@ public class FertilizerGrowFlower : MonoBehaviour
     public Pot pot;                
     public Collider2D potCollider;
 
+ // single speech object
+
     Vector3 originalPosition;
     bool triggered = false;
+
 
     void Start()
     {
@@ -32,7 +35,10 @@ public class FertilizerGrowFlower : MonoBehaviour
         {
             triggered = false; // allow retry if fertilising failed
         }
+
+
     }
+
 
     IEnumerator ReturnFertiliser()
     {
