@@ -12,6 +12,9 @@ public class BeeController : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveInput;
 
+    [Header("Disappear Animation")]
+    public float disappearDuration = 0.25f;
+    Vector3 originalScale;
 
     [Header("Direction animation objects")]
     public GameObject frontObj;
@@ -41,6 +44,7 @@ public class BeeController : MonoBehaviour
         PressSpacebarToPlant.SetActive(false);
         PlantedSuccessfully.SetActive(false);
 
+        originalScale = transform.localScale;
 
     }
 
@@ -131,11 +135,10 @@ public class BeeController : MonoBehaviour
             return;
         }
 
-        bool accepted = pollinationManager.TryAddPollinatedFlower(currentFlower.flowerData);
+        bool accepted = pollinationManager.TryAddPollinatedFlower(currentFlower);
         if (accepted)
         {
-            currentFlower.SetPollinated(true);
-            Debug.Log(currentFlower);
+            Debug.Log("flower can be planted now" + currentFlower);
         }
     }
 
@@ -155,11 +158,12 @@ public class BeeController : MonoBehaviour
         }
 
         bool planted = pollinationManager.TryPlantInto(currentPot);
-        if (planted)
-        {
-            Debug.Log("Planted successfully.");
-            Debug.Log(currentPot);
-        }
+        if (!planted)
+            return;
+
+        Debug.Log("Planted successfully.");
+
+        StartCoroutine(HandlePlanting());
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -195,17 +199,31 @@ public class BeeController : MonoBehaviour
             currentPot = null;
         }
 
-
-
-
-
     }
 
+    IEnumerator HandlePlanting()
+    {
+        yield return ShowForSeconds(PlantedSuccessfully, 0.5f);
 
+        //gameObject.SetActive(false);
 
+        float t = 0f;
 
+        while (t < disappearDuration)
+        {
+            t += Time.deltaTime;
 
+            float progress = 1f - (t / disappearDuration);
 
+            transform.localScale = originalScale * progress;
 
+            yield return null;
+        }
 
+        gameObject.SetActive(false);
+
+        transform.localScale = originalScale; // reset for next spawn
+    }
 }
+
+

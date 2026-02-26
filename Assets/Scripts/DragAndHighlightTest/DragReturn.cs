@@ -11,6 +11,8 @@ public class DragReturn : MonoBehaviour
 
     bool dragging;
 
+    public Bin bin;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -30,6 +32,8 @@ public class DragReturn : MonoBehaviour
     {
         dragging = false;
 
+        bin.TryDispose();   // Bin decides what happens
+
         // return back to original position when released
         rb.MovePosition(startPos);
     }
@@ -39,6 +43,9 @@ public class DragReturn : MonoBehaviour
         if (!dragging) return;
 
         Vector2 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
-        rb.MovePosition(mouseWorld + offset);
+        Vector2 newPos = mouseWorld + offset;
+
+        rb.MovePosition(newPos);
     }
+ 
 }
