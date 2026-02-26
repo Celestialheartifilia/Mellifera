@@ -18,6 +18,8 @@ public class PollinationManager : MonoBehaviour
     public GameObject WrongPollinationTryAgain;
     public GameObject HybridIsReady;
 
+    public int PollinationCount => pickedFlowers.Count;
+
     IEnumerator ShowForSeconds(GameObject obj, float seconds)
     {
         obj.SetActive(true);
@@ -39,10 +41,12 @@ public class PollinationManager : MonoBehaviour
     {
         pickedFlowers.Clear();
         ReadyHybrid = null;
+
+        ResetAllFlowers();
     }
 
 
-    public bool TryAddPollinatedFlower(ItemsSOScript normalFlower)
+    public bool TryAddPollinatedFlower(NormalFlower flower)
     {
         //already have a hybrid ready
         if (ReadyHybrid != null) 
@@ -55,14 +59,16 @@ public class PollinationManager : MonoBehaviour
             return false;
         }
         //prevent picking the same flower twice
-        if (pickedFlowers.Contains(normalFlower))
+        if (pickedFlowers.Contains(flower.flowerData))
         {
             Debug.Log("Same flower cannot be picked twice.");
             return false;
         }
 
-        //Adds a normal flower to the list
-        pickedFlowers.Add(normalFlower);
+        //Adds a normal flower to the list -> store data
+        pickedFlowers.Add(flower.flowerData);
+        //modify visual state
+        flower.SetPollinated(true);
 
         //once 2 flower is picked
         if (pickedFlowers.Count == 2)
@@ -108,5 +114,17 @@ public class PollinationManager : MonoBehaviour
         //pollination is resetted
         ResetPollination();
         return true;
+    }
+
+    public void ResetAllFlowers()
+    {
+        NormalFlower[] flowers = FindObjectsOfType<NormalFlower>();
+
+        foreach (NormalFlower flower in flowers)
+        {
+            flower.SetPollinated(false);
+        }
+
+        Debug.Log("[POLLINATION] All flowers reset");
     }
 }

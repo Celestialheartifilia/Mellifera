@@ -5,10 +5,23 @@ public class Pot : MonoBehaviour
     [Header("Tool Colliders")]
     public Collider2D fertiliserCollider;
     public Collider2D scissorsCollider;
-    //public GameObject BeeGone;
+    public GameObject BeeGone;
 
     [Header("UI (Optional)")]
     public GameObject toolsReadyPopup;
+
+    [Header("Sprites")]
+    public SpriteRenderer spriteRenderer;
+    public Sprite emptyPotSprite;
+    public Sprite pollenPotSprite;
+    public Sprite potWithStudSprite;
+
+    [Header("Hybrid Flower Visuals")]
+    public GameObject hybridFlower1;
+    public GameObject hybridFlower2;
+
+    public ItemsSOScript hybrid1Data;
+    public ItemsSOScript hybrid2Data;
 
     //public bool isEmpty = true;
     public enum FlowerGrowthState
@@ -24,6 +37,7 @@ public class Pot : MonoBehaviour
 
     //reference to the hybridflowermanager -> for communication between pot n manager
     public HybridFlowerManager hybridFlowerManager;
+    public PollinationManager pollinationManager;
 
     //to store the hybrid that was planted
     public ItemsSOScript plantedHybrid;
@@ -36,28 +50,42 @@ public class Pot : MonoBehaviour
 
     public void ResetPot()
     {
+        plantedHybrid = null;
+        growthState = FlowerGrowthState.Empty;
+
         //disables the fertiliser
         if (fertiliserCollider != null)
         {
             fertiliserCollider.enabled = false;
         }
+
         //disables the scissors
         if (scissorsCollider != null)
         {
             scissorsCollider.enabled = false;
         }
+
         //set the bee to active
-       /* if (BeeGone != null)
+        if (BeeGone != null)
         {
             BeeGone.SetActive(true);
-        } */
+        }
+
         //hides UI for tools ready pop up
         if (toolsReadyPopup != null)
         {
             toolsReadyPopup.SetActive(false);
         }
+     
+
+        if (spriteRenderer != null && emptyPotSprite != null)
+        {
+            spriteRenderer.sprite = emptyPotSprite;
+        }
 
         Debug.Log("[POT] Reset.");
+
+        pollinationManager.ResetPollination();
     }
 
     //method is used in the pollination manager script
@@ -78,9 +106,16 @@ public class Pot : MonoBehaviour
 
         //stores the hybrid data
         plantedHybrid = hybrid;
+
+
         //changes the state to planted
         growthState = FlowerGrowthState.Planted;
 
+        if (spriteRenderer != null && pollenPotSprite != null)
+        {
+            spriteRenderer.sprite = pollenPotSprite;
+        }
+            
         Debug.Log($"[PLANT] Planted hybrid: {hybrid.itemName} | ID: {hybrid.itemID}");
 
         // Enable fertiliser colliders
@@ -92,7 +127,6 @@ public class Pot : MonoBehaviour
         //if planting is successful
         return true;
 
-        
     }
     //method is used in FertilizerGrowFlower script
     public bool Fertilise()
@@ -103,9 +137,45 @@ public class Pot : MonoBehaviour
             Debug.LogWarning("[POT] Fertilise failed — wrong state.");
             return false;
         }
+
+        if (spriteRenderer != null && pollenPotSprite != null)
+        {
+            spriteRenderer.sprite = emptyPotSprite;
+        }
+
+        //new
+        if (hybridFlower1 != null) hybridFlower1.SetActive(false);
+        if (hybridFlower2 != null) hybridFlower2.SetActive(false);
+
+        if (plantedHybrid == hybrid1Data)
+        {
+            hybridFlower1.SetActive(true);
+
+            hybridFlower1.transform.SetParent(transform);
+            hybridFlower1.transform.localPosition = new Vector3(0.3f, 1f, 0f);
+
+            Debug.Log("Flower 1 parented");
+        }
+        else if (plantedHybrid == hybrid2Data)
+        {
+            hybridFlower2.SetActive(true);
+
+            hybridFlower2.transform.SetParent(transform);
+            hybridFlower2.transform.localPosition = new Vector3(0.3f, 1f, 0f);
+
+            Debug.Log("Flower 2 parented");
+        }
+
+        //use when final flower is out
+        //if (spriteRenderer != null && pollenPotSprite != null)
+        //{
+        //    spriteRenderer.sprite = potWithStudSprite;
+        //}
+
         //changes the state to fertilised
         growthState = FlowerGrowthState.Fertilised;
         Debug.Log("[FERTILISE] Fertilizer applied");
+
 
         //add anim here, then grow method
         Grow();
@@ -135,11 +205,6 @@ public class Pot : MonoBehaviour
             scissorsCollider.enabled = true;
         }
 
-        /*if (BeeGone != null)
-        {
-            BeeGone.SetActive(false);
-        }*/
-
         // Optional popup
         if (toolsReadyPopup != null)
         {
@@ -158,4 +223,28 @@ public class Pot : MonoBehaviour
     {
         return growthState == FlowerGrowthState.Planted;
     }
+
+    public void DisposeContents()
+    {
+        if (growthState == FlowerGrowthState.Empty)
+            return;
+
+        Debug.Log("[POT] Disposing contents");
+
+        if (hybridFlower1 != null)
+        {
+            hybridFlower1.transform.SetParent(null);
+            hybridFlower1.SetActive(false);
+        }
+
+        if (hybridFlower2 != null)
+        {
+            hybridFlower2.transform.SetParent(null);
+            hybridFlower2.SetActive(false);
+        }
+
+        ResetPot();
+    }
+
+ 
 }
