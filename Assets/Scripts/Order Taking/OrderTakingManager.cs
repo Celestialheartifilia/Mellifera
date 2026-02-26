@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class OrderTakingManager : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class OrderTakingManager : MonoBehaviour
 
     public static OrderTakingManager Instance;
 
+    //take order button
+    public GameObject takeOrderButton;
+    // Pop up message 
+    public GameObject collectedPopup;
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -52,8 +57,44 @@ public class OrderTakingManager : MonoBehaviour
                 break;
         }
 
-        orderBubbleUI.DisplayOrder(currentOrder);
+        //orderBubbleUI.DisplayOrder(currentOrder);
+        // HIDE the bubble initially (so it's not showing yet)
+        orderBubbleUI.gameObject.SetActive(false);
+        //SHOW the button 
+        if (takeOrderButton != null) takeOrderButton.SetActive(true);
     }
+
+    public void OnTakeOrderButtonClicked()
+    {
+        if (currentOrder != null)
+        {
+            // SHOW the bubble now that we clicked
+            orderBubbleUI.gameObject.SetActive(true);
+            orderBubbleUI.DisplayOrder(currentOrder);
+
+            // HIDE the button
+            if (takeOrderButton != null) takeOrderButton.SetActive(false);
+            Debug.Log("Order collected!");
+        }
+    }
+
+    public void OnCloseOrderBubble()
+    {  
+        //The Bubble disappears first
+        if (orderBubbleUI != null)
+        {
+            orderBubbleUI.gameObject.SetActive(false);
+        }
+        // The Popup message starts appearing immediately after
+        if (collectedPopup != null)
+        {
+            StartCoroutine(FlashMessage());
+        }
+
+        Debug.Log("Bubble gone, Popup shown!");
+    }
+
+
 
     // Call this to add an item to the order
     void CreateSmallOrder()
@@ -141,4 +182,16 @@ public class OrderTakingManager : MonoBehaviour
     {
         currentOrder = null;
     }
+
+    private System.Collections.IEnumerator FlashMessage()
+    {
+        collectedPopup.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        collectedPopup.SetActive(false);
+
+        // --- NEW: Load the scene here ---
+        Debug.Log("Transitioning to Main Game Scene...");
+        SceneManager.LoadScene("MainGameScene"); 
+    }
+    
 }
