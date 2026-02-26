@@ -25,11 +25,10 @@ public class BeeController : MonoBehaviour
 
     private NormalFlower currentFlower;
 
-    [Header("Visual Indicators")]
-    public GameObject NeedToPollinate;
-    public GameObject FlowerPollinatedAlready;
-    public GameObject PressSpacebarToPlant;
-    public GameObject PlantedSuccessfully;
+    //[Header("Visual Indicators")]
+
+    //public GameObject PressSpacebarToPlant;
+    //public GameObject PlantedSuccessfully;
 
     void Awake()
     {
@@ -39,10 +38,9 @@ public class BeeController : MonoBehaviour
         ShowOnly(frontObj); // start facing front
 
         //Set false to not Appear first 
-        NeedToPollinate.SetActive(false);
-        FlowerPollinatedAlready.SetActive(false);
-        PressSpacebarToPlant.SetActive(false);
-        PlantedSuccessfully.SetActive(false);
+
+        //PressSpacebarToPlant.SetActive(false);
+        //PlantedSuccessfully.SetActive(false);
 
         originalScale = transform.localScale;
 
@@ -89,21 +87,32 @@ public class BeeController : MonoBehaviour
         }
 
 
-        // moveInput = new Vector2(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical")).normalized;
+        //moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
-        if (Input.GetKeyDown(KeyCode.E))
+        //if (Input.GetKeyDown(KeyCode.E))
+        //{
+        //    TryPollinate();
+        //}
+
+
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    TryPlant();
+        //    StartCoroutine(ShowForSeconds(PlantedSuccessfully, 0.5f));
+        //}
+
+        if (Input.GetMouseButtonDown(0))
         {
             TryPollinate();
         }
-            
 
-        if (Input.GetKeyDown(KeyCode.Space))
+
+        if (Input.GetMouseButtonDown(0))
         {
             TryPlant();
-            StartCoroutine(ShowForSeconds(PlantedSuccessfully, 0.5f));
+           // StartCoroutine(ShowForSeconds(PlantedSuccessfully, 0.5f));
         }
 
-            
     }
 
     void FixedUpdate()
@@ -130,7 +139,7 @@ public class BeeController : MonoBehaviour
         }
         if (currentFlower.isPollinated)
         {
-            StartCoroutine(ShowForSeconds(FlowerPollinatedAlready, 0.5f));
+
             Debug.Log("Flower is already pollinated");
             return;
         }
@@ -173,7 +182,7 @@ public class BeeController : MonoBehaviour
         {
             currentFlower = flower;
             Debug.Log("Detected flower: " + flower.name);
-            StartCoroutine(ShowForSeconds(NeedToPollinate, 0.5f));
+
         }
 
         Pot pot = other.GetComponentInParent<Pot>();
@@ -181,7 +190,7 @@ public class BeeController : MonoBehaviour
         {
             currentPot = pot;
             Debug.Log("Detected pot");
-            StartCoroutine(ShowForSeconds(PressSpacebarToPlant, 1f));
+            //StartCoroutine(ShowForSeconds(PressSpacebarToPlant, 1f));
         }
     }
 
@@ -203,7 +212,7 @@ public class BeeController : MonoBehaviour
 
     IEnumerator HandlePlanting()
     {
-        yield return ShowForSeconds(PlantedSuccessfully, 0.5f);
+       // yield return ShowForSeconds(PlantedSuccessfully, 0.5f);
 
         //gameObject.SetActive(false);
 
