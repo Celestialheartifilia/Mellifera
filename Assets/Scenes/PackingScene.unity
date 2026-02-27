@@ -262,7 +262,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -791.00006, y: 75}
+  m_AnchoredPosition: {x: -790, y: 112}
   m_SizeDelta: {x: 300, y: 475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &73377036
@@ -285,7 +285,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 6419270872512964728, guid: 0d6db1eeccb4021468af4732e5cec96c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -894,8 +894,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -716, y: 112}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -719, y: 99}
+  m_SizeDelta: {x: 83.91, y: 83.91}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &358427904
 MonoBehaviour:
@@ -1239,8 +1239,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -716, y: 235}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -716, y: 226.96005}
+  m_SizeDelta: {x: 83.91, y: 83.91}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &451373267
 MonoBehaviour:
@@ -1262,7 +1262,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2524709661943058933, guid: 66cad90f6732d8748bb03895c804d221, type: 3}
+  m_Sprite: {fileID: -7604420645069165070, guid: ba0dc0776b4c36249bb2b40e56fa7e22, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1746,7 +1746,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &481563852
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2137,8 +2137,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -865, y: 235}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -865, y: 226.96}
+  m_SizeDelta: {x: 83.91, y: 83.91}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &613784584
 MonoBehaviour:
@@ -2160,7 +2160,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 538513131370383185, guid: 57c22f90f931a3b4a814b5c3896df1aa, type: 3}
+  m_Sprite: {fileID: 5033733384163560134, guid: f43ff2049cda7ce43b85cdaca2033b78, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2293,8 +2293,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 632.28, y: -383.79}
-  m_SizeDelta: {x: 682.48, y: 213.61}
+  m_AnchoredPosition: {x: 715.78, y: -423}
+  m_SizeDelta: {x: 488.45, y: 173.58}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &705114026
 MonoBehaviour:
@@ -2734,8 +2734,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -865, y: 112}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -865, y: 96}
+  m_SizeDelta: {x: 83.91, y: 83.91}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &857515324
 MonoBehaviour:
@@ -2757,7 +2757,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -9005769944389503070, guid: e890e5f40cd0db94499e75f506d5ee4a, type: 3}
+  m_Sprite: {fileID: -8854913841011347758, guid: 9686b730d08709a48a4615554f8264cd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7133,8 +7133,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -716, y: 112}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -719, y: 99.00001}
+  m_SizeDelta: {x: 83.91, y: 83.91}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1947218884
 MonoBehaviour:
@@ -7615,8 +7615,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 45
+  m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
