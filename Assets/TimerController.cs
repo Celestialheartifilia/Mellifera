@@ -11,7 +11,11 @@ public class TimerController : MonoBehaviour
     public Button StartButton;
 
     private bool isTimerRunning = false;
-
+    void Start()
+    {
+        TimeLeft = StartTime;
+        isTimerRunning = true; // Add this line so it starts immediately!
+    }
     void Update()
     {
         if (isTimerRunning)
