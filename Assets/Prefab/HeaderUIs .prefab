@@ -451,7 +451,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5066405380082733785}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -3891470776585262719}
+        m_TargetAssemblyTypeName: TopNavUI, Assembly-CSharp
+        m_MethodName: OnExitPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1434032881077383436
 GameObject:
   m_ObjectHideFlags: 0
@@ -724,6 +736,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f02cdb8d6a38ac47b79434d1e9253bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  usePreviousScene: 1
+  specificSceneName: 
 --- !u!1 &6440166642015811931
 GameObject:
   m_ObjectHideFlags: 0
