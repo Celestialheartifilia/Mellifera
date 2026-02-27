@@ -12,6 +12,7 @@ public class DragReturn : MonoBehaviour
     bool dragging;
 
     public Bin bin;
+    public PackingBin packingBin;
 
     void Awake()
     {
@@ -32,7 +33,17 @@ public class DragReturn : MonoBehaviour
     {
         dragging = false;
 
-        bin.TryDispose();   // Bin decides what happens
+        // Hybrid Scene Bin
+        if (bin != null)
+        {
+            bin.TryDispose();
+        }
+
+        // Packing Scene Bin
+        if (packingBin != null)
+        {
+            packingBin.TryDispose();
+        }
 
         // return back to original position when released
         rb.MovePosition(startPos);

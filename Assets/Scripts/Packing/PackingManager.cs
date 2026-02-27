@@ -47,6 +47,10 @@ public class PackingManager : MonoBehaviour
     [SerializeField] GameObject CorrectOrderPrompt;
     [SerializeField] GameObject WrongOrderPrompt;
 
+    bool flowerSelected = false;
+    bool wrapSelected = false;
+    bool accessorySelected = false;
+
 
     bool leavesPlucked = false;
 
@@ -73,7 +77,8 @@ public class PackingManager : MonoBehaviour
         WrongOrderPrompt.SetActive(false);
 
         // Disable wrap + accessory UI initially
-        SetWrapAccessoryButtons(false);
+        SetWrapButtons(false);
+        SetAccessoryButtons(false);
         orderCompleteButton.interactable = false;
 
         // Determine which hybrid button to show
@@ -105,6 +110,15 @@ public class PackingManager : MonoBehaviour
 
     void ActivateHybridFlower(GameObject flower)
     {
+        if (wrapSelected)
+        {
+            Debug.Log("Dispose current wrap first!");
+            // show popup here
+            return;
+        }
+
+        flowerSelected = true;
+
         // Hide buttons after selection
         hybridButton1.gameObject.SetActive(false);
         hybridButton2.gameObject.SetActive(false);
@@ -118,13 +132,21 @@ public class PackingManager : MonoBehaviour
     {
         leavesPlucked = true;
         bgForAccessories.gameObject.SetActive(true);
-        SetWrapAccessoryButtons(true);
+
+        SetWrapButtons(true);
+
+        // DO NOT enable accessories yet
+        SetAccessoryButtons(false);
     }
 
-    void SetWrapAccessoryButtons(bool state)
+    void SetWrapButtons(bool state)
     {
         wrap1Button.gameObject.SetActive(state);
         wrap2Button.gameObject.SetActive(state);
+    }
+
+    void SetAccessoryButtons(bool state)
+    {
         accessory1Button.gameObject.SetActive(state);
         accessory2Button.gameObject.SetActive(state);
     }
@@ -133,9 +155,12 @@ public class PackingManager : MonoBehaviour
     public void SelectWrap1()
     {
         selectedWrap = wrap1;
+        wrapSelected = true;
 
         wrapBackRenderer.sprite = wrap1BackSprite;
         wrapFrontRenderer.sprite = wrap1FrontSprite;
+
+        SetAccessoryButtons(true);
 
         CheckIfOrderReady();
     }
@@ -143,9 +168,12 @@ public class PackingManager : MonoBehaviour
     public void SelectWrap2()
     {
         selectedWrap = wrap2;
+        wrapSelected = true;
 
         wrapBackRenderer.sprite = wrap2BackSprite;
         wrapFrontRenderer.sprite = wrap2FrontSprite;
+
+        SetAccessoryButtons(true);
 
         CheckIfOrderReady();
     }
@@ -153,7 +181,12 @@ public class PackingManager : MonoBehaviour
     // ACCESSORY SELECTION
     public void SelectAccessory1()
     {
+        if (!wrapSelected)
+            return;
+
         selectedAccessory = accessory1;
+        accessorySelected = true;
+
 
         accessory1Object.SetActive(true);
         accessory2Object.SetActive(false);
@@ -163,7 +196,11 @@ public class PackingManager : MonoBehaviour
 
     public void SelectAccessory2()
     {
+        if (!wrapSelected)
+            return;
+
         selectedAccessory = accessory2;
+        accessorySelected = true;
 
         accessory1Object.SetActive(false);
         accessory2Object.SetActive(true);
@@ -183,8 +220,6 @@ public class PackingManager : MonoBehaviour
     {
         ValidateOrder();
     }
-
-
 
 
     void ValidateOrder()
@@ -210,4 +245,111 @@ public class PackingManager : MonoBehaviour
 
     }
 
+    public void HandleDisposal(GameObject disposed)
+    {
+        // Accessory
+        if (disposed == accessory1Object || disposed == accessory2Object)
+        {
+            accessorySelected = false;
+            selectedAccessory = null;
+
+            disposed.SetActive(false);
+            return;
+        }
+
+        // Wrap
+        if (disposed == wrapBackRenderer.gameObject ||
+            disposed == wrapFrontRenderer.gameObject)
+        {
+            wrapSelected = false;
+            selectedWrap = null;
+
+            wrapBackRenderer.sprite = null;
+            wrapFrontRenderer.sprite = null;
+            return;
+        }
+
+        // Flower
+        if (disposed == hybridFlower1 || disposed == hybridFlower2)
+        {
+            disposed.SetActive(false);
+            ResetPackingScene();
+        }
+    }
+
+    void ResetToFlowerState()
+    {
+        flowerSelected = false;
+        leavesPlucked = false;
+
+        wrapSelected = false;
+        selectedWrap = null;
+        wrapBackRenderer.sprite = null;
+        wrapFrontRenderer.sprite = null;
+
+        accessorySelected = false;
+        selectedAccessory = null;
+        accessory1Object.SetActive(false);
+        accessory2Object.SetActive(false);
+
+        SetWrapButtons(false);
+        SetAccessoryButtons(false);
+        bgForAccessories.SetActive(false);
+
+        orderCompleteButton.interactable = false;
+
+        hybridButton1.gameObject.SetActive(true);
+        hybridButton2.gameObject.SetActive(true);
+    }
+
+    void ResetPackingScene()
+    {
+        // ===== STATE =====
+        flowerSelected = false;
+        wrapSelected = false;
+        accessorySelected = false;
+        leavesPlucked = false;
+
+        selectedWrap = null;
+        selectedAccessory = null;
+
+        // ===== FLOWER =====
+        hybridFlower1.SetActive(false);
+        hybridFlower2.SetActive(false);
+
+        hybridButton1.gameObject.SetActive(false);
+        hybridButton2.gameObject.SetActive(false);
+
+        // ===== LEAVES RESET =====
+        ResetLeaves();
+
+        // ===== WRAP RESET =====
+        wrapBackRenderer.sprite = null;
+        wrapFrontRenderer.sprite = null;
+
+        SetWrapButtons(false);
+        SetAccessoryButtons(false);
+
+        bgForAccessories.SetActive(false);
+
+        // ===== ACCESSORY RESET =====
+        accessory1Object.SetActive(false);
+        accessory2Object.SetActive(false);
+
+        // ===== ORDER =====
+        orderCompleteButton.interactable = false;
+
+        Debug.Log("Packing scene fully reset");
+    }
+
+    void ResetLeaves()
+    {
+        LeafTracker tracker = FindObjectOfType<LeafTracker>();
+        if (tracker != null)
+        {
+            tracker.ResetLeaves();
+        }
+    }
 }
+
+

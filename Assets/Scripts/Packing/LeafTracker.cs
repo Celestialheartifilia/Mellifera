@@ -28,4 +28,18 @@ public class LeafTracker : MonoBehaviour
             packingManager.OnLeavesPlucked();
         }
     }
+
+    public void ResetLeaves()
+    {
+        removedLeaves = 0;
+
+        LeafDispose[] leaves = GetComponentsInChildren<LeafDispose>(true);
+
+        foreach (LeafDispose leaf in leaves)
+        {
+            leaf.gameObject.SetActive(true);
+        }
+
+        PluckLeaves.SetActive(true);
+    }
 }
