@@ -12,11 +12,15 @@ public class TimerController : MonoBehaviour
 
     private bool isTimerRunning = false;
 
+
     void Start()
     {
         TimeLeft = StartTime; // Initializes the timer
         isTimerRunning = true;
     }
+
+
+ 
 
     void Update()
     {
