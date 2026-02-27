@@ -31,4 +31,9 @@ public class PackingBin : MonoBehaviour
 
         currentDisposable = null;
     }
+
+    void OnMouseDown()
+    {
+        packingManager.DisposeWholeBouquet();
+    }
 }
