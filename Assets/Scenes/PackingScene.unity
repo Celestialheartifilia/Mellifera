@@ -947,6 +947,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a465691e749e99489ecee965b4dafe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speechIndicator: {fileID: 0}
   flowerItemData: {fileID: 11400000, guid: bf52e7d21ccceec4f8e905e9390908d5, type: 2}
 --- !u!114 &358427907
 MonoBehaviour:
@@ -1384,6 +1385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a465691e749e99489ecee965b4dafe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speechIndicator: {fileID: 0}
   flowerItemData: {fileID: 11400000, guid: d19225a747880e248a115f23bf010ab3, type: 2}
 --- !u!114 &459174703
 MonoBehaviour:
@@ -2291,8 +2293,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 643.50006, y: -428.0959}
-  m_SizeDelta: {x: 633, y: 125}
+  m_AnchoredPosition: {x: 632.28, y: -383.79}
+  m_SizeDelta: {x: 682.48, y: 213.61}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &705114026
 MonoBehaviour:
@@ -2370,9 +2372,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2158823894922413923, guid: bf3f54bff5195134bb2a8effdb00c8fa, type: 3}
-  m_Type: 1
-  m_PreserveAspect: 0
+  m_Sprite: {fileID: 6068044286562254002, guid: cb2f59ab54e33854e92540bb1c31ddae, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -6159,6 +6161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a465691e749e99489ecee965b4dafe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speechIndicator: {fileID: 0}
   flowerItemData: {fileID: 11400000, guid: bf52e7d21ccceec4f8e905e9390908d5, type: 2}
 --- !u!114 &1799674007
 MonoBehaviour:
@@ -7183,6 +7186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a465691e749e99489ecee965b4dafe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speechIndicator: {fileID: 0}
   flowerItemData: {fileID: 11400000, guid: d19225a747880e248a115f23bf010ab3, type: 2}
 --- !u!114 &1947218887
 MonoBehaviour:
@@ -7561,7 +7565,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 54, y: 0}
+  m_AnchoredPosition: {x: 28, y: 0}
   m_SizeDelta: {x: -108, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2143559294

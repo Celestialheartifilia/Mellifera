@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: b1611861290a91b4baa0633108cc0587
+guid: cb2f59ab54e33854e92540bb1c31ddae
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2462478432115244905
-    second: RecipeUI_Icon_0
+      213: 6068044286562254002
+    second: FlowerCollected_Button_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: RecipeUI_Icon_0
+      name: FlowerCollected_Button_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 27
-        width: 489
-        height: 446
+        x: 0
+        y: 2
+        width: 137
+        height: 52
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 96f3a45561b7c2220800000000000000
-      internalID: 2462478432115244905
+      spriteID: 2bcb1e5f026063450800000000000000
+      internalID: 6068044286562254002
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      RecipeUI_Icon_0: 2462478432115244905
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
