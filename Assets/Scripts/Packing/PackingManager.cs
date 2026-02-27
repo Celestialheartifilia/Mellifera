@@ -19,6 +19,7 @@ public class PackingManager : MonoBehaviour
     public ItemsSOScript wrap2;
     public Sprite wrap1BackSprite;
     public Sprite wrap1FrontSprite;
+    public GameObject wrap;
 
     public Sprite wrap2BackSprite;
     public Sprite wrap2FrontSprite;
@@ -47,6 +48,13 @@ public class PackingManager : MonoBehaviour
     [SerializeField] GameObject CorrectOrderPrompt;
     [SerializeField] GameObject WrongOrderPrompt;
 
+    bool flowerSelected = false;
+    bool wrapSelected = false;
+    bool accessorySelected = false;
+
+    Vector3 accessory1StartPos;
+    Vector3 accessory2StartPos;
+
 
     bool leavesPlucked = false;
 
@@ -61,6 +69,10 @@ public class PackingManager : MonoBehaviour
 
         collectedHybrid = GameState.Instance.collectedHybrids[0];
 
+        //store accessory start position
+        accessory1StartPos = accessory1Object.transform.localPosition;
+        accessory2StartPos = accessory2Object.transform.localPosition;
+
         // Hide flowers first
         hybridFlower1.SetActive(false);
         hybridFlower2.SetActive(false);
@@ -73,7 +85,8 @@ public class PackingManager : MonoBehaviour
         WrongOrderPrompt.SetActive(false);
 
         // Disable wrap + accessory UI initially
-        SetWrapAccessoryButtons(false);
+        SetWrapButtons(false);
+        SetAccessoryButtons(false);
         orderCompleteButton.interactable = false;
 
         // Determine which hybrid button to show
@@ -105,6 +118,15 @@ public class PackingManager : MonoBehaviour
 
     void ActivateHybridFlower(GameObject flower)
     {
+        if (wrapSelected)
+        {
+            Debug.Log("Dispose current wrap first!");
+            // show popup here
+            return;
+        }
+
+        flowerSelected = true;
+
         // Hide buttons after selection
         hybridButton1.gameObject.SetActive(false);
         hybridButton2.gameObject.SetActive(false);
@@ -118,13 +140,21 @@ public class PackingManager : MonoBehaviour
     {
         leavesPlucked = true;
         bgForAccessories.gameObject.SetActive(true);
-        SetWrapAccessoryButtons(true);
+
+        SetWrapButtons(true);
+
+        // DO NOT enable accessories yet
+        SetAccessoryButtons(false);
     }
 
-    void SetWrapAccessoryButtons(bool state)
+    void SetWrapButtons(bool state)
     {
         wrap1Button.gameObject.SetActive(state);
         wrap2Button.gameObject.SetActive(state);
+    }
+
+    void SetAccessoryButtons(bool state)
+    {
         accessory1Button.gameObject.SetActive(state);
         accessory2Button.gameObject.SetActive(state);
     }
@@ -133,9 +163,15 @@ public class PackingManager : MonoBehaviour
     public void SelectWrap1()
     {
         selectedWrap = wrap1;
+        wrapSelected = true;
+
+        hybridFlower1.GetComponent<DragReturn>().enabled = false;
+        hybridFlower2.GetComponent<DragReturn>().enabled = false;
 
         wrapBackRenderer.sprite = wrap1BackSprite;
         wrapFrontRenderer.sprite = wrap1FrontSprite;
+
+        SetAccessoryButtons(true);
 
         CheckIfOrderReady();
     }
@@ -143,9 +179,15 @@ public class PackingManager : MonoBehaviour
     public void SelectWrap2()
     {
         selectedWrap = wrap2;
+        wrapSelected = true;
+
+        hybridFlower1.GetComponent<DragReturn>().enabled = false;
+        hybridFlower2.GetComponent<DragReturn>().enabled = false;
 
         wrapBackRenderer.sprite = wrap2BackSprite;
         wrapFrontRenderer.sprite = wrap2FrontSprite;
+
+        SetAccessoryButtons(true);
 
         CheckIfOrderReady();
     }
@@ -153,7 +195,13 @@ public class PackingManager : MonoBehaviour
     // ACCESSORY SELECTION
     public void SelectAccessory1()
     {
+        if (!wrapSelected)
+            return;
+
         selectedAccessory = accessory1;
+        accessorySelected = true;
+
+        wrap.GetComponent<DragReturn>().enabled = false;
 
         accessory1Object.SetActive(true);
         accessory2Object.SetActive(false);
@@ -163,7 +211,13 @@ public class PackingManager : MonoBehaviour
 
     public void SelectAccessory2()
     {
+        if (!wrapSelected)
+            return;
+
         selectedAccessory = accessory2;
+        accessorySelected = true;
+
+        wrap.GetComponent<DragReturn>().enabled = false;
 
         accessory1Object.SetActive(false);
         accessory2Object.SetActive(true);
@@ -183,8 +237,6 @@ public class PackingManager : MonoBehaviour
     {
         ValidateOrder();
     }
-
-
 
 
     void ValidateOrder()
@@ -210,4 +262,136 @@ public class PackingManager : MonoBehaviour
 
     }
 
+    public void HandleDisposal(GameObject disposed)
+    {
+        // =====================
+        // ACCESSORY
+        // =====================
+        if (disposed == accessory1Object || disposed == accessory2Object)
+        {
+            accessorySelected = false;
+            selectedAccessory = null;
+
+            wrap.GetComponent<DragReturn>().enabled = true;
+
+            accessory1Object.SetActive(false);
+            accessory1Object.transform.localPosition = accessory1StartPos;
+
+            accessory2Object.SetActive(false);
+            accessory2Object.transform.localPosition = accessory2StartPos;
+
+            orderCompleteButton.interactable = false;
+
+            Debug.Log("Accessory removed");
+            return;
+        }
+
+        // =====================
+        // WRAP (only if no accessory)
+        // =====================
+        if (disposed == wrap.gameObject)
+        {
+            if (accessorySelected)
+            {
+                Debug.Log("Remove accessory first!");
+                return;
+            }
+
+            wrap.GetComponent<DragReturn>().enabled = true;
+
+            wrapSelected = false;
+            selectedWrap = null;
+
+            hybridFlower1.GetComponent<DragReturn>().enabled = true;
+            hybridFlower2.GetComponent<DragReturn>().enabled = true;
+
+            wrapBackRenderer.sprite = null;
+            wrapFrontRenderer.sprite = null;
+
+            SetAccessoryButtons(false);
+            orderCompleteButton.interactable = false;
+
+            Debug.Log("Wrap removed");
+            return;
+        }
+
+        // =====================
+        // FLOWER (only if no wrap & no accessory)
+        // =====================
+        if (disposed == hybridFlower1 || disposed == hybridFlower2)
+        {
+            if (wrapSelected || accessorySelected)
+            {
+                Debug.Log("Remove accessory and wrap first!");
+                return;
+            }
+
+            hybridFlower1.GetComponent<DragReturn>().enabled = true;
+            hybridFlower2.GetComponent<DragReturn>().enabled = true;
+
+            ResetPackingScene();
+            Debug.Log("Flower removed");
+        }
+    }
+
+    void ResetPackingScene()
+    {
+        // ===== STATE =====
+        flowerSelected = false;
+        wrapSelected = false;
+        accessorySelected = false;
+        leavesPlucked = false;
+
+        selectedWrap = null;
+        selectedAccessory = null;
+
+        // ===== FLOWER =====
+        hybridFlower1.SetActive(false);
+        hybridFlower2.SetActive(false);
+
+        hybridButton1.gameObject.SetActive(false);
+        hybridButton2.gameObject.SetActive(false);
+
+        // ===== LEAVES RESET =====
+        ResetLeaves();
+
+        // ===== WRAP RESET =====
+        wrapBackRenderer.sprite = null;
+        wrapFrontRenderer.sprite = null;
+
+        SetWrapButtons(false);
+        SetAccessoryButtons(false);
+
+        bgForAccessories.SetActive(false);
+
+        // ===== ACCESSORY RESET =====
+        accessory1Object.SetActive(false);
+        accessory1Object.transform.localPosition = accessory1StartPos;
+
+        accessory2Object.SetActive(false);
+        accessory2Object.transform.localPosition = accessory2StartPos;
+
+        // ===== ORDER =====
+        orderCompleteButton.interactable = false;
+
+        Debug.Log("Packing scene fully reset");
+    }
+
+    void ResetLeaves()
+    {
+        LeafTracker tracker = FindObjectOfType<LeafTracker>();
+        if (tracker != null)
+        {
+            tracker.ResetLeaves();
+        }
+    }
+
+    public void DisposeWholeBouquet()
+    {
+        Debug.Log("Whole bouquet disposed");
+
+        ResetPackingScene();
+    }
 }
+
+

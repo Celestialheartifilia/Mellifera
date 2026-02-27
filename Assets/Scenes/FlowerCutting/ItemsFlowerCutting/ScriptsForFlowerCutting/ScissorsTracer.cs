@@ -10,8 +10,13 @@ public class ScissorsTracer : MonoBehaviour
     float tracedLength;
     bool cutDone;
 
+
+
     StemCutZone activeStemZone;
     FlowerCutSwap activeFlower;
+
+
+
 
     void Update()
     {
@@ -49,6 +54,7 @@ public class ScissorsTracer : MonoBehaviour
             cutDone = true;
             activeFlower.Cut();
         }
+
     }
 
     void BindToActiveHybridFlower()

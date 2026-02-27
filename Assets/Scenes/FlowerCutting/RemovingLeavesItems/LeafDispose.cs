@@ -5,9 +5,6 @@ public class LeafDispose : MonoBehaviour
     [Header("Reference")]
     public Collider2D binCollider;
 
-    [Header("Behaviour")]
-    public bool destroyInsteadOfDisable = true;
-
     LeafTracker leafTracker;
 
     void Start()
@@ -20,10 +17,12 @@ public class LeafDispose : MonoBehaviour
         if (other != binCollider) return;
 
         leafTracker?.NotifyLeafRemoved();
+        
+        gameObject.SetActive(false); // disable only
+    }
 
-        if (destroyInsteadOfDisable)
-            Destroy(gameObject);
-        else
-            gameObject.SetActive(false);
+    public void ResetLeaf()
+    {
+        gameObject.SetActive(true);
     }
 }

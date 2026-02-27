@@ -41,16 +41,15 @@ public class Bin : MonoBehaviour
 
         Debug.Log("[BIN] Disposing: " + currentDisposable.name);
 
-        //Check if object is a Pot
         Pot pot = currentDisposable.GetComponent<Pot>();
 
         if (pot != null)
         {
-            pot.DisposeContents();     // Sprite reset only
+            pot.DisposeContents();
         }
         else
         {
-            Destroy(currentDisposable); // Normal disposal
+            Destroy(currentDisposable);
         }
 
         currentDisposable = null;

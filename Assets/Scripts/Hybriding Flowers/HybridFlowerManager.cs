@@ -13,6 +13,17 @@ public class HybridFlowerManager : MonoBehaviour
     public GameObject hybridFlower1;
     public GameObject hybridFlower2;
 
+
+    public GameObject speechIndicator;
+    public GameObject speechIndicator2;
+
+    void Awake()
+    {
+        if (speechIndicator != null)
+            speechIndicator.SetActive(false);
+        if (speechIndicator2 != null)
+            speechIndicator2.SetActive(false);
+    }
     void Start()
     {
         orderTakingManager = OrderTakingManager.Instance;

@@ -56,5 +56,14 @@ TagManager:
   - name: OrderBubble
     uniqueID: 3527452549
     locked: 0
+  - name: Background
+    uniqueID: 877012923
+    locked: 0
+  - name: Accessories
+    uniqueID: 2640178507
+    locked: 0
+  - name: Player
+    uniqueID: 3079617619
+    locked: 0
   m_RenderingLayers:
   - Default
