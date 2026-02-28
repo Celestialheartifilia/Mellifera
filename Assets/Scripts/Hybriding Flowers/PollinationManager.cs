@@ -12,6 +12,7 @@ public class PollinationManager : MonoBehaviour
     //Temporarily stores the two normal flowers the player pollinated into a list with a capacity of 2 -> players can only pollinate 2 different flower
     private readonly List<ItemsSOScript> pickedFlowers = new List<ItemsSOScript>(2);
 
+    public BeeController beeController;
 
     //Visual Indicators
     [Header("Visual Indicators")]
@@ -126,5 +127,11 @@ public class PollinationManager : MonoBehaviour
         }
 
         Debug.Log("[POLLINATION] All flowers reset");
+    }
+
+    public void OnClearPollination()
+    {
+        ResetPollination();
+        beeController.ReturnToStart();
     }
 }

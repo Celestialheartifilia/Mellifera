@@ -3,47 +3,68 @@ using UnityEngine;
 
 public class FertilizerGrowFlower : MonoBehaviour
 {
-    [Header("Assign in Inspector")]
-    public Pot pot;                
-    public Collider2D potCollider;
+    [Header("References")]
+    public GameObject emptyShovelPreview;
+    public GameObject soilShovelTool;
 
- // single speech object
+    public Pot pot;
 
-    Vector3 originalPosition;
-    bool triggered = false;
-
+    Vector3 soilShovelStartPos;
 
     void Start()
     {
-        originalPosition = transform.position;
+        emptyShovelPreview.SetActive(false);
+        soilShovelTool.SetActive(false);
+
+        soilShovelStartPos = soilShovelTool.transform.position;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    bool fertiliserUsed = false;
+
+    public void DisableFertiliser()
     {
-        if (triggered) return;
-        if (other != potCollider) return;
-
-        triggered = true;
-
-        bool success = pot.Fertilise();
-
-        if (success)
-        {
-            StartCoroutine(ReturnFertiliser());
-        }
-        else
-        {
-            triggered = false; // allow retry if fertilising failed
-        }
-
-
+        fertiliserUsed = true;
     }
 
-
-    IEnumerator ReturnFertiliser()
+    bool CanUse()
     {
-        yield return new WaitForSeconds(1f);
-        transform.position = originalPosition;
-        triggered = false;
+        return pot != null &&
+               pot.growthState == Pot.FlowerGrowthState.Planted &&
+               !fertiliserUsed;
     }
+
+    void OnMouseEnter()
+    {
+        if (!CanUse()) return;
+
+        emptyShovelPreview.SetActive(true);
+    }
+
+    void OnMouseExit()
+    {
+        emptyShovelPreview.SetActive(false);
+    }
+
+    void OnMouseDown()
+    {
+        if (!CanUse()) return;
+
+        emptyShovelPreview.SetActive(false);
+
+        soilShovelTool.transform.position = soilShovelStartPos;
+        soilShovelTool.SetActive(true);
+    }
+
+    public void ResetTool()
+    {
+        soilShovelTool.SetActive(false);
+        emptyShovelPreview.SetActive(false);
+    }
+
+    public void ResetFertiliserState()
+    {
+        fertiliserUsed = false;
+    }
+
+
 }

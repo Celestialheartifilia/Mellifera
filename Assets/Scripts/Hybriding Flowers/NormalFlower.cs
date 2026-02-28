@@ -38,4 +38,10 @@ public class NormalFlower : MonoBehaviour
         }
     }
 
+    void OnMouseDown()
+    {
+        BeeController bee = FindObjectOfType<BeeController>();
+        bee.MoveToFlower(this);
+    }
+
 }

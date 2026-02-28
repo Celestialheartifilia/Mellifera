@@ -1,125 +1,140 @@
 using System.Collections;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.LightTransport;
 
 public class BeeController : MonoBehaviour
 {
+    [Header("Movement")]
     public float moveSpeed = 5f;
+
+    [Header("References")]
     public PollinationManager pollinationManager;
-    public Pot currentPot;
 
-    private Rigidbody2D rb;
-    private Vector2 moveInput;
-
-    [Header("Disappear Animation")]
-    public float disappearDuration = 0.25f;
-    Vector3 originalScale;
-
-    [Header("Direction animation objects")]
+    [Header("Direction Animation")]
     public GameObject frontObj;
     public GameObject backObj;
     public GameObject leftObj;
     public GameObject rightObj;
 
+    [Header("Disappear Animation")]
+    public float disappearDuration = 0.25f;
 
-    private NormalFlower currentFlower;
+    Rigidbody2D rb;
 
-    //[Header("Visual Indicators")]
+    Vector3 targetPosition;
+    bool hasTarget = false;
 
-    //public GameObject PressSpacebarToPlant;
-    //public GameObject PlantedSuccessfully;
+    Vector3 startPosition;
+    Vector3 originalScale;
+
+    NormalFlower currentFlower;
+    Pot currentPot;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
 
-        ShowOnly(frontObj); // start facing front
-
-        //Set false to not Appear first 
-
-        //PressSpacebarToPlant.SetActive(false);
-        //PlantedSuccessfully.SetActive(false);
-
+        startPosition = transform.position;
         originalScale = transform.localScale;
 
+        ShowOnly(frontObj);
     }
 
     void Update()
     {
-
-        // Mouse follow
-        // Always auto-follow mouse
-        // Always auto-follow mouse (correct ScreenToWorldPoint z)
-        
-        Camera mainCam = Camera.main;
-        if (mainCam == null)
+        if (hasTarget)
         {
-            Debug.LogError("No MainCamera found. Tag your camera as MainCamera.");
+            MoveToTarget();
+        }
+    }
+
+    void MoveToTarget()
+    {
+        Vector2 dir = (targetPosition - transform.position);
+
+        if (dir.magnitude < 0.05f)
+        {
+            rb.linearVelocity = Vector2.zero;
+            hasTarget = false;
+
+            OnReachedTarget();
             return;
         }
 
-        Vector3 mp = Input.mousePosition;
-        mp.z = -mainCam.transform.position.z;   // distance from camera to your 2D plane (usually 10)
-
-        Vector3 mouseWorld = mainCam.ScreenToWorldPoint(mp);
-        mouseWorld.z = 0f;
-
-        Vector2 dir = (Vector2)(mouseWorld - transform.position);
-
-        // optional stop when very close
-        if (dir.magnitude < 0.1f) moveInput = Vector2.zero;
-        else moveInput = dir.normalized;
-
-        //------------------------------------------------
+        dir.Normalize();
+        rb.linearVelocity = dir * moveSpeed;
 
         // Direction animation
         if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
-        {
-            if (dir.x > 0) ShowOnly(rightObj);
-            else ShowOnly(leftObj);
-        }
+            ShowOnly(dir.x > 0 ? rightObj : leftObj);
         else
-        {
-            if (dir.y > 0) ShowOnly(backObj);
-            else ShowOnly(frontObj);
-        }
-
-
-        //moveInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
-
-        //if (Input.GetKeyDown(KeyCode.E))
-        //{
-        //    TryPollinate();
-        //}
-
-
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    TryPlant();
-        //    StartCoroutine(ShowForSeconds(PlantedSuccessfully, 0.5f));
-        //}
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            TryPollinate();
-        }
-
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            TryPlant();
-           // StartCoroutine(ShowForSeconds(PlantedSuccessfully, 0.5f));
-        }
-
+            ShowOnly(dir.y > 0 ? backObj : frontObj);
     }
 
-    void FixedUpdate()
+    void OnReachedTarget()
     {
-        rb.linearVelocity = moveInput * moveSpeed;
+        // Pollinate flower
+        if (currentFlower != null && !currentFlower.isPollinated)
+        {
+            pollinationManager.TryAddPollinatedFlower(currentFlower);
+            currentFlower = null;
+            return;
+        }
+
+        // Plant into pot
+        if (currentPot != null && pollinationManager.PollinationCount == 2)
+        {
+            bool planted = pollinationManager.TryPlantInto(currentPot);
+
+            if (planted)
+            {
+                ReturnToStart();
+            }
+
+            currentPot = null;
+        }
     }
 
+    // ===============================
+    // Public Movement Commands
+    // ===============================
+
+    public void MoveToFlower(NormalFlower flower)
+    {
+        if (flower.isPollinated)
+            return;
+
+        currentFlower = flower;
+        currentPot = null;
+
+        targetPosition = flower.transform.position;
+        hasTarget = true;
+    }
+
+    public void MoveToPot(Pot pot)
+    {
+        if (pollinationManager.PollinationCount < 2)
+            return;
+
+        currentPot = pot;
+        currentFlower = null;
+
+        targetPosition = pot.transform.position;
+        hasTarget = true;
+    }
+
+    public void ReturnToStart()
+    {
+        currentFlower = null;
+        currentPot = null;
+
+        targetPosition = startPosition;
+        hasTarget = true;
+    }
+
+    // ===============================
+    // Animations
+    // ===============================
 
     void ShowOnly(GameObject obj)
     {
@@ -129,110 +144,6 @@ public class BeeController : MonoBehaviour
         if (rightObj) rightObj.SetActive(obj == rightObj);
     }
 
-
-    void TryPollinate()
-    {
-        if (currentFlower == null)
-        {
-            Debug.Log("Not on flower");
-            return;
-        }
-        if (currentFlower.isPollinated)
-        {
-
-            Debug.Log("Flower is already pollinated");
-            return;
-        }
-
-        bool accepted = pollinationManager.TryAddPollinatedFlower(currentFlower);
-        if (accepted)
-        {
-            Debug.Log("flower can be planted now" + currentFlower);
-        }
-    }
-
-    //Show for a few seconds
-    IEnumerator ShowForSeconds(GameObject obj, float seconds)
-    {
-        obj.SetActive(true);
-        yield return new WaitForSeconds(seconds);
-        obj.SetActive(false);
-    }
-
-    void TryPlant()
-    {
-        if (currentPot == null) 
-        {
-            return;
-        }
-
-        bool planted = pollinationManager.TryPlantInto(currentPot);
-        if (!planted)
-            return;
-
-        Debug.Log("Planted successfully.");
-
-        StartCoroutine(HandlePlanting());
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        NormalFlower flower = other.GetComponentInParent<NormalFlower>();
-        if (flower != null)
-        {
-            currentFlower = flower;
-            Debug.Log("Detected flower: " + flower.name);
-
-        }
-
-        Pot pot = other.GetComponentInParent<Pot>();
-        if (pot != null)
-        {
-            currentPot = pot;
-            Debug.Log("Detected pot");
-            //StartCoroutine(ShowForSeconds(PressSpacebarToPlant, 1f));
-        }
-    }
-
-    void OnTriggerExit2D(Collider2D other)
-    {
-        NormalFlower flower = other.GetComponentInParent<NormalFlower>();
-        if (flower != null && flower == currentFlower)
-        {
-            currentFlower = null;
-        }
-
-        Pot pot = other.GetComponentInParent<Pot>();
-        if (pot != null && pot == currentPot)
-        {
-            currentPot = null;
-        }
-
-    }
-
-    IEnumerator HandlePlanting()
-    {
-       // yield return ShowForSeconds(PlantedSuccessfully, 0.5f);
-
-        //gameObject.SetActive(false);
-
-        float t = 0f;
-
-        while (t < disappearDuration)
-        {
-            t += Time.deltaTime;
-
-            float progress = 1f - (t / disappearDuration);
-
-            transform.localScale = originalScale * progress;
-
-            yield return null;
-        }
-
-        gameObject.SetActive(false);
-
-        transform.localScale = originalScale; // reset for next spawn
-    }
 }
 
 

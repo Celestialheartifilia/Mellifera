@@ -53,6 +53,10 @@ public class Pot : MonoBehaviour
         plantedHybrid = null;
         growthState = FlowerGrowthState.Empty;
 
+        FertilizerGrowFlower fert = FindObjectOfType<FertilizerGrowFlower>();
+        if (fert != null)
+            fert.ResetFertiliserState();
+
         //disables the fertiliser
         if (fertiliserCollider != null)
         {
@@ -63,12 +67,6 @@ public class Pot : MonoBehaviour
         if (scissorsCollider != null)
         {
             scissorsCollider.enabled = false;
-        }
-
-        //set the bee to active
-        if (BeeGone != null)
-        {
-            BeeGone.SetActive(true);
         }
 
         //hides UI for tools ready pop up
@@ -106,7 +104,6 @@ public class Pot : MonoBehaviour
 
         //stores the hybrid data
         plantedHybrid = hybrid;
-
 
         //changes the state to planted
         growthState = FlowerGrowthState.Planted;
@@ -246,5 +243,9 @@ public class Pot : MonoBehaviour
         ResetPot();
     }
 
- 
+    void OnMouseDown()
+    {
+        BeeController bee = FindObjectOfType<BeeController>();
+        bee.MoveToPot(this);
+    }
 }
