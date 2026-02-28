@@ -9,6 +9,7 @@ public class PackingManager : MonoBehaviour
     public GameObject hybridFlower2;
 
     [Header("Hybrid Buttons (UI)")]
+    public GameObject flowerTabBackground;
     public Button hybridButton1;
     public Button hybridButton2;
 
@@ -31,7 +32,7 @@ public class PackingManager : MonoBehaviour
     public GameObject accessory2Object;
 
     [Header("Wrap + Accessory Buttons")]
-    public GameObject bgForAccessories;
+    public GameObject wrapAccessoryTabBackground;
     public Button wrap1Button;
     public Button wrap2Button;
     public Button accessory1Button;
@@ -76,7 +77,6 @@ public class PackingManager : MonoBehaviour
         // Hide flowers first
         hybridFlower1.SetActive(false);
         hybridFlower2.SetActive(false);
-
         hybridButton1.gameObject.SetActive(false);
         hybridButton2.gameObject.SetActive(false);
 
@@ -85,6 +85,7 @@ public class PackingManager : MonoBehaviour
         WrongOrderPrompt.SetActive(false);
 
         // Disable wrap + accessory UI initially
+        wrapAccessoryTabBackground.gameObject.SetActive(false);
         SetWrapButtons(false);
         SetAccessoryButtons(false);
         orderCompleteButton.interactable = false;
@@ -99,7 +100,7 @@ public class PackingManager : MonoBehaviour
             return;
         }
 
-        // Decide which button to show
+        //DECIDE WHICH HYBRID FLOWER ICON BUTTONS TO SHOW UP IN THE FLOWER TAB
         if (tag1.flowerItemData == collectedHybrid)
         {
             hybridButton1.gameObject.SetActive(true);
@@ -136,14 +137,15 @@ public class PackingManager : MonoBehaviour
     }
 
     // CALL THIS from your leaf plucking script when done
+    //CHECK IF ALL LEAVES ON HYBRID FLOWER ARE PLUCKED, THEN SET WRAPACCESSORY TAB + WRAP ICON BUTTONS TO SHOW
     public void OnLeavesPlucked()
     {
         leavesPlucked = true;
-        bgForAccessories.gameObject.SetActive(true);
+        wrapAccessoryTabBackground.gameObject.SetActive(true);
 
         SetWrapButtons(true);
 
-        // DO NOT enable accessories yet
+        //ACCESSORY ICON BUTTONS ARE NOT SHOWN YET
         SetAccessoryButtons(false);
     }
 
@@ -362,7 +364,7 @@ public class PackingManager : MonoBehaviour
         SetWrapButtons(false);
         SetAccessoryButtons(false);
 
-        bgForAccessories.SetActive(false);
+        wrapAccessoryTabBackground.SetActive(false);
 
         // ===== ACCESSORY RESET =====
         accessory1Object.SetActive(false);
