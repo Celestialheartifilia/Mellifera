@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 12b04edb4888b3d4bb4a07bbd3034651
+guid: 744750c7fb6155946b4a1a689b154bf6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6431465527458746621
-    second: HybridFlower2_icon_0
+      213: 6125923782336792210
+    second: MeterBar_1Bar_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: HybridFlower2_icon_0
+      name: MeterBar_1Bar_0
       rect:
         serializedVersion: 2
-        x: 17
-        y: 15
-        width: 375
-        height: 271
+        x: 0
+        y: 0
+        width: 262
+        height: 61
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 30fa6aa9d28deb6a0800000000000000
-      internalID: -6431465527458746621
+      spriteID: 2964d473937a30550800000000000000
+      internalID: 6125923782336792210
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 74a1c2d7fd91f4e49b7b37caa4d98feb
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      HybridFlower2_icon_0: -6431465527458746621
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

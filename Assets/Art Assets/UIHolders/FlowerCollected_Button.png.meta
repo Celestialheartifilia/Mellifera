@@ -103,13 +103,13 @@ TextureImporter:
       name: FlowerCollected_Button_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 2
-        width: 137
-        height: 52
+        x: 1
+        y: 3
+        width: 135
+        height: 50
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 18, y: 14, z: 19, w: 16}
       customData: 
       outline: []
       physicsShape: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 6a279e7ff85504e40a7f4c7809b41f6e
     internalID: 0
     vertices: []
     indices: 

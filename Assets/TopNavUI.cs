@@ -1,11 +1,16 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TopNavUI : MonoBehaviour
 {
     public static TopNavUI instance;
+
+    [Header("UI Objects")]
+    public GameObject orderViewButton;
+    public GameObject hybridGuideButton;
+
     void Awake()
     {
-        // If an instance already exists, destroy this one so we don't have two bars
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
@@ -13,13 +18,35 @@ public class TopNavUI : MonoBehaviour
         }
 
         instance = this;
-        // This keeps the whole Canvas and the Timer inside it alive!
         DontDestroyOnLoad(gameObject);
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        
+        UpdateUI(SceneManager.GetActiveScene().name);
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        UpdateUI(scene.name);
+    }
+
+    void UpdateUI(string sceneName)
+    {
+        // Hide everything first
+        orderViewButton.SetActive(false);
+        hybridGuideButton.SetActive(false);
+
+        if (sceneName == "HybridingFlowerScene")
+        {
+            orderViewButton.SetActive(true);
+            hybridGuideButton.SetActive(true);
+        }
+        else if (sceneName == "PackingScene")
+        {
+            orderViewButton.SetActive(true);
+        }
     }
 }
