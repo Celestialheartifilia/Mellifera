@@ -38,6 +38,7 @@ public class Pot : MonoBehaviour
     //reference to the hybridflowermanager -> for communication between pot n manager
     public HybridFlowerManager hybridFlowerManager;
     public PollinationManager pollinationManager;
+    public FertilizerManager fertilizerManager;
 
     //to store the hybrid that was planted
     public ItemsSOScript plantedHybrid;
@@ -53,9 +54,8 @@ public class Pot : MonoBehaviour
         plantedHybrid = null;
         growthState = FlowerGrowthState.Empty;
 
-        FertilizerGrowFlower fert = FindObjectOfType<FertilizerGrowFlower>();
-        if (fert != null)
-            fert.ResetFertiliserState();
+        if (fertilizerManager != null)
+            fertilizerManager.ResetFertiliserState();
 
         //disables the fertiliser
         if (fertiliserCollider != null)

@@ -1,28 +1,82 @@
+using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class Shovel : MonoBehaviour
 {
-    public Pot pot;
-    public Collider2D potCollider;
-    public FertilizerGrowFlower fertilizerManager;
+    Rigidbody2D rb;
+    Camera cam;
 
-    bool triggered = false;
+    Vector2 offset;
+    Vector2 startPos;
+
+    bool dragging;
+
+    Pot currentPot;
+    Collider2D soilCollider;
+
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        cam = Camera.main;
+
+        startPos = rb.position;
+    }
+
+    public void ActivateShovel(Pot pot, Collider2D soil)
+    {
+        currentPot = pot;
+        soilCollider = soil;
+
+        dragging = true;
+    }
+
+    void OnMouseDown()
+    {
+        dragging = true;
+        Vector2 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
+        offset = rb.position - mouseWorld;
+    }
+
+    void OnMouseUp()
+    {
+        dragging = false;
+        StartCoroutine(ResetShovel());
+    }
+
+    void FixedUpdate()
+    {
+        if (!dragging) return;
+
+        Vector2 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
+        rb.MovePosition(mouseWorld + offset);
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (triggered) return;
-        if (other != potCollider) return;
+        if (soilCollider == null) return;
+        if (other != soilCollider) return;
 
-        triggered = true;
-
-        bool success = pot.Fertilise();
-
-        if (success)
+        if (currentPot != null && currentPot.IsReadyToFertilise())
         {
-            fertilizerManager.ResetTool();
-            fertilizerManager.DisableFertiliser();
+            currentPot.Fertilise();
         }
 
-        triggered = false;
+        StartCoroutine(ResetShovel());
+    }
+
+    IEnumerator ResetShovel()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        rb.MovePosition(startPos);
+        dragging = false;
+
+        gameObject.SetActive(false);
+
+        // Also reset fertiliser visuals
+        FertilizerManager fert = FindObjectOfType<FertilizerManager>();
+        if (fert != null)
+            fert.ResetFertiliserState();
     }
 }

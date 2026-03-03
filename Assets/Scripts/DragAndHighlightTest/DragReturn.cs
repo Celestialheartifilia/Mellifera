@@ -14,11 +14,25 @@ public class DragReturn : MonoBehaviour
     public Bin bin;
     public PackingBin packingBin;
 
+    public bool returnToStartPosition = true;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         cam = Camera.main;
-        startPos = rb.position;   // store original position
+
+        rb.gravityScale = 0f; // ensure no gravity
+        rb.linearVelocity = Vector2.zero;
+    }
+
+    // IMPORTANT: store correct start position every time object becomes active
+    void OnEnable()
+    {
+        if (rb == null)
+            rb = GetComponent<Rigidbody2D>();
+
+        startPos = rb.position;
+        rb.linearVelocity = Vector2.zero;
     }
 
     void OnMouseDown()
@@ -33,20 +47,16 @@ public class DragReturn : MonoBehaviour
     {
         dragging = false;
 
-        // Hybrid Scene Bin
+        // Call bin disposal BEFORE resetting position
         if (bin != null)
-        {
             bin.TryDispose();
-        }
 
-        // Packing Scene Bin
         if (packingBin != null)
-        {
             packingBin.TryDispose();
-        }
 
-        // return back to original position when released
-        rb.MovePosition(startPos);
+        // Hard reset physics properly
+        rb.linearVelocity = Vector2.zero;
+        rb.position = startPos;
     }
 
     void FixedUpdate()
@@ -58,5 +68,5 @@ public class DragReturn : MonoBehaviour
 
         rb.MovePosition(newPos);
     }
- 
+
 }
