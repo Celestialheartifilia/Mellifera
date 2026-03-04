@@ -88,7 +88,9 @@ public class OrderTakingManager : MonoBehaviour
         // The Popup message starts appearing immediately after
         if (collectedPopup != null)
         {
-            StartCoroutine(FlashMessage());
+
+            collectedPopup.SetActive(true);
+            //StartCoroutine(FlashMessage());
         }
 
         Debug.Log("Bubble gone, Popup shown!");
@@ -183,15 +185,15 @@ public class OrderTakingManager : MonoBehaviour
         currentOrder = null;
     }
 
-    private System.Collections.IEnumerator FlashMessage()
-    {
-        collectedPopup.SetActive(true);
-        yield return new WaitForSeconds(2f);
-        collectedPopup.SetActive(false);
+    //private System.Collections.IEnumerator FlashMessage()
+    //{
+    //    collectedPopup.SetActive(true);
+    //    yield return new WaitForSeconds(2f);
+    //    collectedPopup.SetActive(false);
 
-        // --- NEW: Load the scene here ---
-        Debug.Log("Transitioning to Main Game Scene...");
-        SceneManager.LoadScene("MainGameScene"); 
-    }
+    //    // --- NEW: Load the scene here ---
+    //    Debug.Log("Transitioning to Main Game Scene...");
+    //    SceneManager.LoadScene("MainGameScene"); 
+    //}
     
 }

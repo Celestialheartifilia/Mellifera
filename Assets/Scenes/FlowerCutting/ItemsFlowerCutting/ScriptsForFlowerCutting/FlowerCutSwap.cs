@@ -32,18 +32,18 @@ public class FlowerCutSwap : MonoBehaviour
     }
 
     // ?? THIS is the button function (Home button will call this)
-    public void LoadScene()
-    {
-        // If we forgot to type the scene name, show error
-        if (string.IsNullOrEmpty(sceneName))
-        {
-            Debug.LogError("No scene name typed! Put the scene name in Inspector.");
-            return;
-        }
+    //public void LoadScene()
+    //{
+    //    // If we forgot to type the scene name, show error
+    //    if (string.IsNullOrEmpty(sceneName))
+    //    {
+    //        Debug.LogError("No scene name typed! Put the scene name in Inspector.");
+    //        return;
+    //    }
 
-        // Go to the new scene
-        SceneManager.LoadScene(sceneName);
-    }
+    //    // Go to the new scene
+    //    SceneManager.LoadScene(sceneName);
+    //}
 
     // ?? This runs when we CUT the flower
     public void Cut()
@@ -94,7 +94,8 @@ public class FlowerCutSwap : MonoBehaviour
             // use the data that was passed in
             GameState.Instance.AddHybrid(hybridData);
 
-
+            //maybe not destroy
+            //set inactive then reset??
             Destroy(gameObject);
         }
     }
